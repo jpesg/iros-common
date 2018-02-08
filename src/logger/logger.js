@@ -18,7 +18,7 @@ const transports = [
 
 let _logger = console;
 
-export const configureLogger = (config, use_transports = ['console', 'iros-mail']) => {
+export const configureLogger = (use_transports = ['console', 'iros-mail']) => {
   _logger = new (winston.Logger)({transports: use_transports.map(t => (transports.find(f => f.name === t) || {}).fn).filter(f => f)});
 };
 
