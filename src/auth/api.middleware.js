@@ -1,11 +1,12 @@
 import passport from 'passport';
 
-const authenticate = (req, res, next) => {
-  passport.authenticate('bearer', {session: false}, function(err, ok) {
-    if (err || !ok) return res.status(401).json({message: 'Unauthorized', error: err || 'Invalid Key'});
+const authenticate = (req, res, next) =>
+    passport.authenticate('api',
+        {session: false},
+        (err, ok) => {
+          if (err || !ok) return next(new Error(err || 'Invalid Key'));
 
-    return next();
-  })(req, res, next);
-};
+          return next();
+        })(req, res, next);
 
-export default authenticate
+export default authenticate;

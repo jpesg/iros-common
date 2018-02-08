@@ -1,6 +1,6 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
-import BearerStrategy from 'passport-local';
+import BearerStrategy from 'passport-http-bearer';
 import userService from '../service/user';
 
 const strategies = [
@@ -8,7 +8,7 @@ const strategies = [
     name: 'api',
     fn: (config) => new BearerStrategy((key, callback) => {
       if (!key || !key.length) return callback('Empty Access Key');
-      if (key !== config.accessKey) return callback('Invalid Access Key');
+      if (key !== config.apiKey && key !== config.accessKey) return callback('Invalid Access Key');
 
       return callback(null, true);
     }),

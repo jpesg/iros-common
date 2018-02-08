@@ -1,7 +1,7 @@
 import passport from 'passport';
 
 const authenticate = (req, res, next) => {
-  passport.authenticate('email.password', (err, u) => {
+  return passport.authenticate('email.password', (err, u) => {
     if (err) return next(err);
     req.user = u;
 
