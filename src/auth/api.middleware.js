@@ -1,10 +1,10 @@
 import passport from 'passport';
+import {UnauthorizedHttpError} from '../errors/http.error';
 
 const authenticate = (req, res, next) =>
-    passport.authenticate('api',
-        {session: false},
+    passport.authenticate('api', {session: false},
         (err, ok) => {
-          if (err || !ok) return next(new Error(err || 'Invalid Key'));
+          if (err || !ok) return next(new UnauthorizedHttpError(err || 'Invalid Key'));
 
           return next();
         })(req, res, next);
