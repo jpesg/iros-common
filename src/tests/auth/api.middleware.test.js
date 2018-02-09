@@ -70,7 +70,7 @@ describe('## auth/api.middleware.test', () => {
 
   it('configures with the api strategy and successfully authenticates with express', (done) => {
 
-    configureApp(config);
+    configureAuth(config);
     const app = configureApp(router);
 
     request(app)
