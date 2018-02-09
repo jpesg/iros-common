@@ -12,10 +12,11 @@ const schema = {
 const services = ['lookup', 'mail', 'ogi', 'text', 'tinyurl', 'user'];
 for (const s in services) {
   if (services.hasOwnProperty(s)) {
+    const service = services[s];
     // add to schema
-    schema[s] = {};
-    schema[s][getServiceUrl(s)] = Joi.string().required();
-    schema[s][getServiceKey(s)] = Joi.string().required();
+    schema[service] = {};
+    schema[service][getServiceUrl(service)] = Joi.string().required();
+    schema[service][getServiceKey(service)] = Joi.string().required();
   }
 }
 export {schema};
@@ -23,11 +24,11 @@ export {schema};
 const config = (service, envVars = {}) => {
   const out = {};
 
-  if (schema[getServiceUrl(service)]) {
+  if (schema[service] && schema[service][getServiceUrl(service)]) {
     out.url = envVars[getServiceUrl(service)];
   }
 
-  if (schema[getServiceKey(service)]) {
+  if (schema[service] && schema[service][getServiceKey(service)]) {
     out.key = envVars[getServiceKey(service)];
   }
 
