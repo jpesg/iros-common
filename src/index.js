@@ -25,6 +25,9 @@ import textService from './service/text';
 import tinyUrlService from './service/tinyurl';
 import userService from './service/user';
 
+//workers
+import Worker from './worker/pool';
+
 const configureServices = (config) => [
   lookupService,
   mailService,
@@ -70,4 +73,7 @@ export {
   textService,
   tinyUrlService,
   userService,
+
+  //workers
+  Worker
 };
