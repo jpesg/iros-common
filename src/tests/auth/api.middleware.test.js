@@ -6,7 +6,7 @@ import request from 'supertest';
 import httpStatus from 'http-status';
 
 const config = {
-  apiKey: 'TEST-KEY',
+  api: {key: 'TEST-KEY'},
 };
 
 const router = express.Router();
@@ -21,7 +21,7 @@ describe('## auth/api.middleware.test', () => {
     configureAuth(config);
 
     const request = {
-      headers: {authorization: `Bearer ${config.apiKey}`},
+      headers: {authorization: `Bearer ${config.api.key}`},
     };
 
     const response = {};
@@ -61,26 +61,26 @@ describe('## auth/api.middleware.test', () => {
 
     request(app)
         .get('/auth-only')
-        .set('Authorization', `Bearer INVALID-${config.apiKey}`)
+        .set('Authorization', `Bearer INVALID-${config.api.key}`)
         .send()
         .expect(httpStatus.UNAUTHORIZED)
         .then(() => done())
         .catch(e => done(e));
   });
-  /*
-   it('configures with the api strategy and successfully authenticates with express', (done) => {
 
-   configureApp(config);
-   const app = configureApp(routes);
+  it('configures with the api strategy and successfully authenticates with express', (done) => {
 
-   request(app)
-   .get('/auth-only')
-   .set('Authorization', `Bearer ${config.apiKey}`)
-   .send()
-   .expect(httpStatus.OK)
-   .then(() => done())
-   .catch(e => done(e));
-   });*/
+    configureApp(config);
+    const app = configureApp(router);
+
+    request(app)
+        .get('/auth-only')
+        .set('Authorization', `Bearer ${config.api.key}`)
+        .send()
+        .expect(httpStatus.OK)
+        .then(() => done())
+        .catch(e => done(e));
+  });
 
 });
 

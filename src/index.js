@@ -7,6 +7,9 @@ import authEmailPassword from './auth/email.password.middleware';
 import authJWT from './auth/jwt.middleware';
 import configureAuth from './auth/passport';
 
+//config
+import config, {schema as configSchema} from './config/config';
+
 //errors
 import BaseError from './errors/base.error';
 import HttpError, {ApiHttpError, UnauthorizedHttpError, BadRequestHttpError, NotFoundHttpError} from './errors/http.error';
@@ -40,6 +43,10 @@ export {
   authApi,
   authEmailPassword,
   authJWT,
+
+  //config
+  config,
+  configSchema,
 
   //errors
   BaseError,

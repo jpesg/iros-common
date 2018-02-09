@@ -8,7 +8,7 @@ const strategies = [
     name: 'api',
     fn: (config) => new BearerStrategy((key, callback) => {
       if (!key || !key.length) return callback('Empty Access Key');
-      if (key !== config.apiKey && key !== config.accessKey) return callback('Invalid Access Key');
+      if (key !== config.api.key) return callback('Invalid Access Key');
 
       return callback(null, true);
     }),
