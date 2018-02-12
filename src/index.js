@@ -13,6 +13,7 @@ import config, {schema as configSchema} from './config/config';
 //errors
 import BaseError from './errors/base.error';
 import HttpError, {ApiHttpError, UnauthorizedHttpError, BadRequestHttpError, NotFoundHttpError} from './errors/http.error';
+import {SkipWorkerError} from './errors/worker.error';
 
 //logger
 import logger, {configureLogger} from './logger/logger';
@@ -58,6 +59,7 @@ export {
   UnauthorizedHttpError,
   BadRequestHttpError,
   NotFoundHttpError,
+  SkipWorkerError,
 
   //logger
   configureLogger,
@@ -75,5 +77,5 @@ export {
   userService,
 
   //workers
-  Worker
+  Worker,
 };

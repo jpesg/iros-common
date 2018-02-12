@@ -1,4 +1,5 @@
 import logger from '../logger/logger';
+import {SkipWorkerError} from '../errors/worker.error';
 
 let worker;
 
@@ -12,7 +13,7 @@ process.on('message', (e) => {
       worker.run(module, command);
       break;
     default:
-      logger.errro(`Received invalid message ${JSON.stringify(e)}`);
+      logger.error(`Received invalid message ${JSON.stringify(e)}`);
       break;
   }
 });
@@ -36,7 +37,15 @@ class Worker {
     this.sendToPool('run', {status: 'finished'});
   }
 
-  runFailed(error) {
+  runFailed(e) {
+    let error = '';
+    if (typeof e === 'string') {
+      error = e;
+    } else {
+      if (e.message) {
+        error = e.message;
+      }
+    }
     this.sendToPool('run', {status: 'failed', error});
   }
 
@@ -54,9 +63,17 @@ class Worker {
 
     //todo check return from fn is a Promise
 
-    return fn()
-        .then(() => _this.runFinished())
-        .catch(e => this.runFailed(e));
+    try {
+      return fn()
+          .then(() => _this.runFinished())
+          .catch(e => {
+            if (e instanceof SkipWorkerError) return _this.runFinished();
+
+            _this.runFailed(e);
+          });
+    } catch (e) {
+      _this.runFailed(e);
+    }
 
   }
 }

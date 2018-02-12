@@ -107,9 +107,13 @@ class Pool {
             worker.status = 'working';
             break;
           case 'finished':
+            worker.status = 'waiting';
+            worker.last = new Date().getTime();
+            break;
           case 'failed':
             worker.status = 'waiting';
             worker.last = new Date().getTime();
+            logger.error(`worker failure ${e.message.error}`);
             break;
         }
         break;
