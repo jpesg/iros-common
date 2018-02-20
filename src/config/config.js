@@ -7,9 +7,12 @@ const schema = {
   api: {
     API_KEY: Joi.string().required(),
   },
+  user: {
+    USER_URL: Joi.string().required(),
+  },
 };
 
-const services = ['lookup', 'mail', 'ogi', 'text', 'tinyurl', 'user'];
+const services = ['lookup', 'mail', 'ogi', 'text', 'tinyurl'];
 for (const s in services) {
   if (services.hasOwnProperty(s)) {
     const service = services[s];

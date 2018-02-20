@@ -4,7 +4,7 @@ import express from 'express';
 import config from './config';
 
 //import config helpers
-import {configureLogger, configureAuth, configureApp, configureServices, authApi, mailService} from 'comunik8-common';
+import {configureLogger, configureAuth, configureApp, configureServices, configureMongoose, authApi, mailService} from 'comunik8-common';
 
 // init logs
 configureLogger();
@@ -12,8 +12,11 @@ configureLogger();
 // init auth
 configureAuth(config);
 
+// init database
+configureMongoose(config);
+
 // init services
-configureServices(config);
+configureServices(config.service);
 
 // configure routes
 const router = express.Router();

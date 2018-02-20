@@ -3,7 +3,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "comunik8-common": "^1.0.13"
+    "comunik8-common": "^1.0.23"
   },
   "babel": {
     "presets": [

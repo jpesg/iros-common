@@ -26,8 +26,12 @@ const config = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
 
+  //todo generate automatically
   api: common('api', envVars),
-  mail: common('mail', envVars),
+
+  service: {
+    mail: common('mail', envVars),
+  },
 };
 
 export default config;

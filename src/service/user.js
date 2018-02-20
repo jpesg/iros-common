@@ -4,7 +4,7 @@ let service = {};
 let app = 'unknown';
 
 const configure = (config) => {
-  service = config.iros_user;
+  service = config.user;
   app = config.app;
 };
 
