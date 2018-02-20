@@ -14,7 +14,7 @@ function getLink(response_object) {
 function minify(url) {
   const options = {
     method: 'GET',
-    uri: `${service.url}/get-tiny-url?return_url=${url}`,
+    uri: `${service.url}/get-tiny-url?return_url=${new Buffer(url).toString('base64')}&is_base_64=true`,
     json: true,
     headers: {
       'Authorization': `Bearer ${service.key}`,
