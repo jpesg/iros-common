@@ -4,7 +4,7 @@ import logger from '../logger/logger';
 let service = {};
 
 const configure = (config) => {
-  service = config.url;
+  service = config.tinyurl;
 };
 
 function getLink(response_object) {
