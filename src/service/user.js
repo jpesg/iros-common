@@ -1,4 +1,5 @@
 import request from 'request-promise';
+import ApiHttpError from '../errors/http.error';
 
 let service = {};
 let app = 'unknown';
@@ -61,7 +62,7 @@ function send(options) {
       .then(body => body)
       .catch(err => {
         const message = err.error && err.error.message ? err.error.message : 'Failed to request User Service';
-        return Promise.reject(new Error(message, err.statusCode, true));
+        return Promise.reject(new ApiHttpError(message, true, {}, err.statusCode || 500));
       });
 
 }

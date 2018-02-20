@@ -23,7 +23,7 @@ const configureApp = (routes) => {
 
   // if error is not an instanceOf HttpError, convert it.
   app.use((err, req, res, next) => {
-    if (!(err instanceof HttpError) && !dev) return next(new new HttpError(err.message, err.isPublic, err.errors, err.status));
+    if (!(err instanceof HttpError) && !dev) return next(new new HttpError(err.message, err.isPublic, err.errors, err.status || httpStatus.INTERNAL_SERVER_ERROR));
     return next(err);
   });
 
