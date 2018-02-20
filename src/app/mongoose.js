@@ -9,7 +9,7 @@ const configure = (config) => {
   mongoose.Promise = Promise;
 
   // connect to mongo db
-  let mongoOptions = {useMongoClient: true, authSource: config.mongo.db};
+  let mongoOptions = {authSource: config.mongo.db};
   if (config.mongo.server.indexOf(',') >= 0) mongoOptions.replicaSet = config.mongo.rs;
   if (config.mongo.cert) {
     mongoOptions = {
