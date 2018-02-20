@@ -4,7 +4,7 @@ let service = {};
 let app = 'unknown';
 
 const configure = (config) => {
-  service = config.user;
+  service = config.iros_user;
   app = config.app;
 };
 
@@ -24,7 +24,7 @@ function post(path, data, override_options = {}) {
   return send({
     ...{
       method: 'POST',
-      uri: `${service.user}${path}`,
+      uri: `${service.url}${path}`,
       body: data,
       json: true,
     },
@@ -36,7 +36,7 @@ function get(path, data = {}, override_options = {}) {
   return send({
     ...{
       method: 'GET',
-      uri: `${service.user}${path}?${Object.keys(data).map((key) => `${key}=${data[key]}`).join('&')}`,
+      uri: `${service.url}${path}?${Object.keys(data).map((key) => `${key}=${data[key]}`).join('&')}`,
       json: true,
     },
     ...override_options
@@ -47,7 +47,7 @@ function do_delete(path, data, override_options = {}) {
   return send({
     ...{
       method: 'DELETE',
-      uri: `${service.user}${path}`,
+      uri: `${service.url}${path}`,
       body: data,
       json: true,
     },

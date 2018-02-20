@@ -26,6 +26,9 @@ import textService from './service/text';
 import tinyUrlService from './service/tinyurl';
 import userService from './service/user';
 
+//db
+import configureMongoose from './app/mongoose';
+
 //workers
 import Worker from './worker/pool';
 
@@ -41,6 +44,9 @@ const configureServices = (config) => [
 export {
   //app
   configureApp,
+
+  //db
+  configureMongoose,
 
   //auth
   configureAuth,
