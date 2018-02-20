@@ -32,14 +32,14 @@ import configureMongoose from './app/mongoose';
 //workers
 import Worker from './worker/pool';
 
-const configureServices = (config) => [
+const configureServices = (config, app) => [
   lookupService,
   mailService,
   ogiService,
   textService,
   tinyUrlService,
   userService,
-].forEach(m => m.configure(config));
+].forEach(m => m.configure(config, app));
 
 export {
   //app

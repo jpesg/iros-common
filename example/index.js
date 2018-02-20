@@ -16,7 +16,7 @@ configureAuth(config);
 configureMongoose(config);
 
 // init services
-configureServices(config.service);
+configureServices(config.service, config.app);
 
 // configure routes
 const router = express.Router();

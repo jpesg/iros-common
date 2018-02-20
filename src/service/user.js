@@ -3,9 +3,9 @@ import request from 'request-promise';
 let service = {};
 let app = 'unknown';
 
-const configure = (config) => {
+const configure = (config, app_name) => {
   service = config.user;
-  app = config.app;
+  app = app_name;
 };
 
 function login(email, password) {
