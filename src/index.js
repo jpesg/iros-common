@@ -18,6 +18,9 @@ import {SkipWorkerError} from './errors/worker.error';
 //logger
 import logger, {configureLogger} from './logger/logger';
 
+//helpers
+import numberHelper from './helpers/number';
+
 //services
 import lookupService from './service/lookup';
 import mailService from './service/mail';
@@ -71,7 +74,8 @@ export {
   configureLogger,
   logger,
 
-  //todo helpers
+  //helpers
+  numberHelper,
 
   //services
   configureServices,

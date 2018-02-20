@@ -5,14 +5,20 @@ import {configSchema, config} from '../../index';
 chai.config.includeStack = true;
 
 describe('## config/config', () => {
-  it('configSchema should contain api', (done) => {
+  it('configSchema should contain api key', (done) => {
     expect(configSchema['api']).not.to.be.undefined;
     expect(configSchema['api'].API_KEY).not.to.be.undefined;
     done();
   });
 
+  it('configSchema should contain user url', (done) => {
+    expect(configSchema['user']).not.to.be.undefined;
+    expect(configSchema['user'].USER_URL).not.to.be.undefined;
+    done();
+  });
+
   it('configSchema should contain all the services', (done) => {
-    const services = ['lookup', 'mail', 'ogi', 'text', 'tinyurl', 'user'];
+    const services = ['lookup', 'mail', 'ogi', 'text', 'tinyurl'];
     services.forEach(k => {
       //check exists
       expect(configSchema[k]).not.to.be.undefined;
@@ -75,7 +81,4 @@ describe('## config/config', () => {
   });
 
 });
-
-
-
 
