@@ -7,11 +7,13 @@ const configure = (config) => {
   service = config.dialer;
 };
 
-const scheduleCall = (first_name, surname, mobile, email, type, data = {})
-    => send('lead/add', {first_name, surname, mobile, email, type, data: JSON.stringify(data)});
+function scheduleCall({first_name, surname, mobile, email, type, data = {}}) {
+  return send('lead/add', {first_name, surname, mobile, email, type, data: JSON.stringify(data)});
+}
 
-const cancelCall = (mobile, type)
-    => send('lead/cancel', {mobile, type});
+function cancelCall({mobile, type}) {
+  return send('lead/cancel', {mobile, type});
+}
 
 function send(path, data = {}) {
   const options = {

@@ -12,7 +12,7 @@ const schema = {
   },
 };
 
-const services = ['lookup', 'mail', 'ogi', 'text', 'tinyurl'];
+const services = ['dialer', 'lookup', 'mail', 'ogi', 'text', 'tinyurl'];
 for (const s in services) {
   if (services.hasOwnProperty(s)) {
     const service = services[s];
