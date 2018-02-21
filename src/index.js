@@ -22,6 +22,7 @@ import logger, {configureLogger} from './logger/logger';
 import numberHelper from './helpers/number';
 
 //services
+import dialerService from './service/dialer';
 import lookupService from './service/lookup';
 import mailService from './service/mail';
 import ogiService from './service/ogi';
@@ -36,6 +37,7 @@ import configureMongoose from './app/mongoose';
 import Worker from './worker/pool';
 
 const configureServices = (config, app) => [
+  dialerService,
   lookupService,
   mailService,
   ogiService,
@@ -79,6 +81,7 @@ export {
 
   //services
   configureServices,
+  dialerService,
   lookupService,
   mailService,
   ogiService,
