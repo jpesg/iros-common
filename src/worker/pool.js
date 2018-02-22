@@ -5,120 +5,216 @@
 import logger from '../logger/logger';
 import child_process from 'child_process';
 import os from 'os';
-import {v4 as uuid} from 'uuid';
 
-class Pool {
+export class Worker {
+  INIT = 'init';
+  WAITING = 'waiting';
+  PREPARING = 'preparing';
+  WORKING = 'working';
+  FINISH = 'finish';
+
+  process;
+  status = this.INIT;
+  // fn ( module, command, duration, error)
+  onCommandFinished;
+
+  module;
+  command;
+  start;
+
+  end = 0;
+
+  constructor() {
+    this._reset();
+    this.process = child_process.fork(`${__dirname}/worker`);
+    this.process.on('message', msg => this.onMessage(msg));
+  }
+
+  transition(s) {
+    const {INIT, WAITING, PREPARING, WORKING, FINISH, status} = this;
+
+    switch (s) {
+      case WAITING:
+        if ([FINISH, INIT].indexOf(status) > 0) return this.status = s;
+        break;
+
+      case PREPARING:
+        if (status === WAITING) return this.status = s;
+        break;
+
+      case WORKING:
+        if (status === PREPARING) return this.status = s;
+        break;
+
+      case FINISH:
+        if (status === WORKING) return this.status = WAITING;
+        break;
+
+    }
+
+    return false;
+  }
+
+  exec(module, command) {
+    if (this.transition(this.PREPARING)) {
+      this.module = module;
+      this.command = command;
+      this.start = this._getTime();
+      return this.process.send({type: 'exec', module, command});
+    }
+  }
+
+  finish(error = null) {
+    if (this.transition(this.FINISH)) {
+      this.end = this._getTime();
+
+      if (error) logger.error(`command failure ${error} ${this.module} ${this.command}`);
+
+      if (typeof this.onCommandFinished === 'function') {
+        this.onCommandFinished(this.module, this.command, this.end - this.start, error);
+      }
+
+      this._reset();
+      this.transition(this.WAITING);
+    }
+  }
+
+  onMessage(e) {
+    switch (e.type) {
+      case this.WAITING:
+      case this.WORKING:
+        return this.transition(e.type);
+
+      case this.FINISH:
+        return this.finish(e.error);
+    }
+  }
+
+  _getTime() {
+    const n = process.hrtime();
+    return n[0] * 1000000 + n[1] / 1000;
+  }
+
+  _reset() {
+    this.module = null;
+    this.command = null;
+    this.start = null;
+  }
+}
+
+export default class Pool {
   config = {
     maxWorkers: os.cpus().length,
-    tasks: {},
   };
 
-  workers = {};
+  // {module, command, interval, stats: [{ }]}
+  tasks = [];
+  // array of Worker
+  workers = [];
 
   constructor(config = {}) {
     const _this = this;
 
-    //configure
     Object.keys(config).forEach(k => {
       if (_this.config[k]) _this.config[k] = config[k];
     });
 
-    this.initWorkers();
-    this.initTasks();
+    this._initWorkers();
+    this._initTasks(config.tasks || {});
+
+    process.on('beforeExit', this.stop);
   }
 
-  stats() {
-    //todo provide better stats
-    const stats = {}, {workers} = this;
-    Object.keys(workers).forEach(k => {
-      const {last, status} = workers[k];
-      stats[k] = {last, status};
-    });
-    return stats;
+  stop() {
+    this._stopTasks();
+    this._stopWorkers();
   }
 
-  initWorkers() {
-    const _this = this, {config: {maxWorkers}, workers} = _this;
+  _initWorkers() {
+    const {config: {maxWorkers}} = this;
 
     for (let i = 0; i < maxWorkers; i++) {
-      const worker = {
-        status: 'waiting',
-        last: 0,
-        process: child_process.fork(`${__dirname}/worker`),
-      };
-
-      worker.process.on('message', (msg) => _this.onMessage(msg));
-
-      const w = uuid();
-      workers[w] = worker;
-      _this.sendToWorker(w, 'init', {uuid: w});
+      this._createWorker();
     }
   }
 
-  initTasks() {
-    const _this = this,
-        {tasks} = _this.config;
+  _createWorker() {
+    const worker = new Worker();
+    worker.onCommandFinished = this._taskFinished.bind(this);
+    this.workers.push(worker);
+  }
+
+  _initTasks(tasks) {
+    const _this = this;
 
     for (const t in tasks) {
       if (tasks.hasOwnProperty(t)) {
 
-        const task = tasks[t];
-        setInterval(() => _this.runTask(task.module, task.command), task.interval);
+        const {module, command, interval} = tasks[t];
+
+        this.tasks.push({
+          module,
+          command,
+          stats: [],
+          interval: setInterval(() => _this.runTask(module, command), interval),
+        });
       }
     }
   }
 
-  getAvailableWorker() {
-    const {workers} = this;
-    const sorted = Object.keys(workers).filter(key => workers[key].status === 'waiting').sort((a, b) => a.last < b.last);
-    if (!sorted.length) return;
-    return sorted[0];
-  }
-
-  runTask(module, command, args = []) {
-    const worker = this.getAvailableWorker();
+  runTask(module, command) {
+    const worker = this._getAvailableWorker();
     if (!worker) {
       logger.error('failed to get worker');
       return;
     }
-    this.sendToWorker(worker, 'run', {module, command, ...args});
+
+    if (this.workers.length !== this.config.maxWorkers) {
+      for (let i = 0; i < this.config.maxWorkers - this.workers.length; i++) {
+        this._createWorker();
+      }
+    }
+
+    return worker.exec(module, command);
   }
 
-  sendToWorker(uuid, type, message) {
-    try {
-      this.workers[uuid].process.send({type, message});
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  onMessage(e) {
-    if (!e.uuid) return logger.error(`Received invalid message ${JSON.stringify(e)}`);
-
-    const {workers} = this;
-    if (!workers[e.uuid]) return logger.error(`Received message from non-existing worker ${e.uuid}`);
-
-    const worker = workers[e.uuid];
-
-    switch (e.type) {
-      case 'run':
-        switch (e.message.status) {
-          case 'started':
-            worker.status = 'working';
-            break;
-          case 'finished':
-            worker.status = 'waiting';
-            worker.last = new Date().getTime();
-            break;
-          case 'failed':
-            worker.status = 'waiting';
-            worker.last = new Date().getTime();
-            logger.error(`worker failure ${e.message.error}`);
-            break;
+  _taskFinished(module, command, duration, error) {
+    for (const i in this.tasks) {
+      if (this.tasks.hasOwnProperty(i)) {
+        const s = this.tasks[i];
+        if (s.module === module && s.command === command) {
+          s.stats.push({duration, error, timestamp: Date.now()});
+          s.stats = s.stats.slice(-10);
+          return;
         }
-        break;
+      }
+    }
+  }
+
+  _getAvailableWorker() {
+    const sorted = this.workers.filter(w => w.status === 'waiting').sort((a, b) => a.end < b.end);
+    if (!sorted.length) return;
+    return sorted[0];
+  }
+
+  _stopTasks() {
+    this.tasks.forEach(task => {
+      try {
+        clearInterval(task.interval);
+      } catch (e) {
+      }
+    });
+  }
+
+  _stopWorkers() {
+    for (const id in this.workers) {
+      if (this.workers.hasOwnProperty(id)) {
+        try {
+          this.workers[id].process.kill();
+        } catch (e) {
+          logger.error(e);
+        }
+      }
     }
   }
 }
-
-export default Pool;
