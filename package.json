@@ -1,11 +1,11 @@
 {
   "name": "comunik8-common",
-  "version": "1.0.39",
+  "version": "1.0.40",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "start": "gulp serve",
-    "test": "cross-env NODE_ENV=test gulp && ./node_modules/.bin/mocha --ui bdd --reporter spec --colors  dist/tests --recursive",
+    "test": "gulp && cross-env NODE_ENV=test ./node_modules/.bin/mocha --ui bdd --reporter spec --colors  dist/tests --recursive",
     "deploy": "gulp && yarn publish"
   },
   "repository": {
