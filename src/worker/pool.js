@@ -68,7 +68,7 @@ export class Worker {
     if (this.transition(this.FINISH)) {
       this.end = this._getTime();
 
-      if (error) logger.error(`command failure ${error} ${this.module} ${this.command}`);
+      if (error) logger.error(`command failure: ${error}, module: ${this.module}, command: ${this.command}`);
 
       if (typeof this.onCommandFinished === 'function') {
         this.onCommandFinished(this.module, this.command, this.end - this.start, error);
@@ -121,8 +121,8 @@ export default class Pool {
 
     this._initWorkers();
     this._initTasks(config.tasks || {});
-
-    process.on('beforeExit', this.stop);
+    
+    if (process.env.NODE_ENV !== 'test') process.on('beforeExit', this.stop);
   }
 
   stop() {

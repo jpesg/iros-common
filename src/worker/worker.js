@@ -1,3 +1,6 @@
+import {SkipWorkerError} from '../errors/worker.error';
+import logger from '../logger/logger';
+
 process.on('message', (e) => {
   switch (e.type) {
     case 'exec':
@@ -18,11 +21,11 @@ const exec = (module, command) => {
 
   //require module
   const mod = require(module);
-  if (!mod) return failed(`Module ${module} not found!`);
+  if (!mod) return failed(new Error(`Module ${module} not found!`));
 
-  //check fn is promise
+  //check fn is function
   const fn = mod[command];
-  if (typeof fn !== 'function') return failed(`Command ${command} not found!`);
+  if (typeof fn !== 'function') return failed(new Error(`Command ${command} not found!`));
 
   //exec
   try {
