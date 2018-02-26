@@ -23,7 +23,7 @@ const getCountry = (number) => {
 
   } catch (e) {
     logger.error(`failed to parse number ${number}. ${e.message}`);
-    return null;
+    return;
   }
 };
 
