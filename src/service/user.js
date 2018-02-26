@@ -13,7 +13,7 @@ function login(email, password) {
   return post('/auth/password', {email, password});
 }
 
-function canAccess(jwt, app, role = 'user', section = null) {
+function canAccess(jwt, role = 'user', section = null) {
   return get('/user/can-access', {app, section, role}, {
     headers: {
       'Authorization': `JWT ${jwt}`,
