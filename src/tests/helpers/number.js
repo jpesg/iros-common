@@ -28,6 +28,11 @@ describe('## helpers/number', () => {
       expect(numberHelper.getInternational(f)).to.be.equal('+443308081500');
     });
 
+    // get country codes
+    expect(numberHelper.getCountry('+4403308081500')).to.be.equal('GB');
+    expect(numberHelper.getCountry('+1 (800) 233-2742')).to.be.equal('US');
+    expect(numberHelper.getCountry('00420800123456')).to.be.equal('CZ');
+
     done();
   });
 });

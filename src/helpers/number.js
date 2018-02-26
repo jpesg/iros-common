@@ -15,6 +15,18 @@ const isValid = (number, country = 'GB') => {
   }
 };
 
+const getCountry = (number) => {
+  try {
+    const parsed = phoneUtil.parse(number.replace(/^00/, '+'));
+
+    return phoneUtil.getRegionCodeForNumber(parsed);
+
+  } catch (e) {
+    logger.error(`failed to parse number ${number}. ${e.message}`);
+    return null;
+  }
+};
+
 const isMobile = (number, country) => phoneUtil.getNumberType(phoneUtil.parse(number, country)) === PhoneNumberType.MOBILE;
 
 const format = (number, form = PhoneNumberFormat.INTERNATIONAL, country = 'GB') => {
@@ -32,4 +44,4 @@ const format = (number, form = PhoneNumberFormat.INTERNATIONAL, country = 'GB') 
 const getInternational = (number, country) => format(number, PhoneNumberFormat.INTERNATIONAL, country);
 const getLocal = (number, country) => format(number, PhoneNumberFormat.NATIONAL, country);
 
-export default {isValid, format, isMobile, getInternational, getLocal};
+export default {isValid, format, isMobile, getInternational, getLocal, getCountry};
