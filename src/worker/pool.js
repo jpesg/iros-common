@@ -121,7 +121,7 @@ export default class Pool {
 
     this._initWorkers();
     this._initTasks(config.tasks || {});
-    
+
     if (process.env.NODE_ENV !== 'test') process.on('beforeExit', this.stop);
   }
 
@@ -183,6 +183,7 @@ export default class Pool {
       if (this.tasks.hasOwnProperty(i)) {
         const s = this.tasks[i];
         if (s.module === module && s.command === command) {
+          if (duration / 1000 > s.interval) logger.error(`Task took longer than expected ${module}/${command}. Expected: ${s.interval}. Took: ${Math.round(duration / 1000)}`);
           s.stats.push({duration, error, timestamp: Date.now()});
           s.stats = s.stats.slice(-10);
           return;
