@@ -84,16 +84,16 @@ function resetPassword(email, token, password) {
   return post('/auth/password/reset', {email, token, password});
 }
 
-function getUsers(jwt) {
-  return get('/user/all', {}, jwt);
+function getUsers(jwt, company = undefined) {
+  return get('/user/all', {company}, jwt);
 }
 
-function createUser(email, jwt) {
-  return post('/user', {email: email}, jwt);
+function createUser(email, jwt, company = undefined) {
+  return post('/user', {email, company}, jwt);
 }
 
 function deleteUser(email, jwt) {
-  return get('/user', {email: email}, jwt)
+  return get('/user', {email}, jwt)
       .then(user => {
         const roles = user.roles.filter(role => role.app === app);
 
@@ -108,7 +108,7 @@ function addRole(email, role, section, jwt) {
 }
 
 function deleteRole(email, role, section, jwt) {
-  const data = {email: email, app, role: role};
+  const data = {email, app, role: role};
   if (section) data.section = section;
   return do_delete('/user/role', data, jwt);
 }
