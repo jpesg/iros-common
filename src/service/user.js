@@ -14,49 +14,58 @@ function login(email, password) {
 }
 
 function canAccess(jwt, role = 'user', section = null) {
-  return get('/user/can-access', {app, section, role}, {
-    headers: {
-      'Authorization': `JWT ${jwt}`,
-    },
-  });
+  return get('/user/can-access', {app, section, role}, jwt);
 }
 
-function post(path, data, override_options = {}) {
+function post(path, data, authorization, override_options = {}) {
   return send({
     ...{
       method: 'POST',
       uri: `${service.url}${path}`,
       body: data,
       json: true,
+      headers: {
+        authorization,
+      },
     },
     ...override_options
   });
 }
 
-function get(path, data = {}, override_options = {}) {
+function get(path, data = {}, authorization = null, override_options = {}) {
   return send({
     ...{
       method: 'GET',
       uri: `${service.url}${path}?${Object.keys(data).map((key) => `${key}=${data[key]}`).join('&')}`,
       json: true,
+      headers: {
+        authorization,
+      },
     },
     ...override_options
   });
 }
 
-function do_delete(path, data, override_options = {}) {
+function do_delete(path, data = {}, authorization = null, override_options = {}) {
   return send({
     ...{
       method: 'DELETE',
       uri: `${service.url}${path}`,
       body: data,
       json: true,
+      headers: {
+        authorization,
+      },
+
     },
     ...override_options
   });
 }
 
 function send(options) {
+  if (options.headers && options.headers.authorization) {
+    options.headers.authorization = `JWT ${options.headers.authorization}`;
+  }
 
   return request(options)
       .then(body => body)
@@ -76,23 +85,15 @@ function resetPassword(email, token, password) {
 }
 
 function getUsers(jwt) {
-  return get('/user/all', {}, {
-    headers: {
-      'Authorization': jwt,
-    },
-  });
+  return get('/user/all', {}, jwt);
 }
 
 function createUser(email, jwt) {
-  return post('/user', {email: email}, {
-    headers: {
-      'Authorization': jwt,
-    },
-  });
+  return post('/user', {email: email}, jwt);
 }
 
 function deleteUser(email, jwt) {
-  return get('/user', {email: email}, {headers: {'Authorization': jwt,}})
+  return get('/user', {email: email}, jwt)
       .then(user => {
         const roles = user.roles.filter(role => role.app === app);
 
@@ -103,22 +104,13 @@ function deleteUser(email, jwt) {
 
 function addRole(email, role, section, jwt) {
   const data = {email, app, role, section};
-
-  return post('/user/role', data, {
-    headers: {
-      'Authorization': jwt,
-    },
-  });
+  return post('/user/role', data, jwt);
 }
 
 function deleteRole(email, role, section, jwt) {
   const data = {email: email, app, role: role};
   if (section) data.section = section;
-  return do_delete('/user/role', data, {
-    headers: {
-      'Authorization': jwt,
-    },
-  });
+  return do_delete('/user/role', data, jwt);
 }
 
 export default {login, canAccess, requestPasswordReset, resetPassword, getUsers, createUser, addRole, deleteRole, deleteUser, configure};
