@@ -31,13 +31,15 @@ const configureApp = (routes) => {
   app.use((req, res, next) => next(new NotFoundHttpError('API not found')));
 
   // error handler, send stacktrace only during development
-  app.use((err, req, res, next) =>
-      res.status(err.status).json({
-        message: err.isPublic ? err.message : httpStatus[err.status],
-        stack: dev ? err.stack : {},
-        errors: err.errors || {},
-      }),
-  );
+  app.use((err, req, res, next) => {
+    const status = httpStatus[err.status] || httpStatus[500];
+
+    return res.status(err.status || 500).json({
+      message: err.isPublic ? err.message : status,
+      stack: dev ? err.stack : {},
+      errors: err.errors || {},
+    });
+  });
 
   // insecure requests are ok in development
   if (dev) {
