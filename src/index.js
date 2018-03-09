@@ -5,6 +5,7 @@ import configureApp from './app/express';
 import authApi from './auth/api.middleware';
 import authEmailPassword from './auth/email.password.middleware';
 import authJWT from './auth/jwt.middleware';
+import authUserRole from './auth/user.middleware';
 import configureAuth from './auth/passport';
 
 //config
@@ -58,6 +59,7 @@ export {
   authApi,
   authEmailPassword,
   authJWT,
+  authUserRole,
 
   //config
   config,
