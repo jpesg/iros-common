@@ -6,11 +6,13 @@ require('dotenv').config();
 
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
-  NODE_ENV: Joi.string()
-      .allow(['development', 'production', 'test', 'provision'])
-      .default('development'),
+  NODE_ENV: Joi.string().allow(['development', 'production', 'test', 'provision']).default('development'),
 
   PORT: Joi.number().default(4055),
+
+  MONGO_USERNAME: Joi.string(),
+  MONGO_DB: Joi.string().required(),
+  MONGO_SERVERS: Joi.string().required(),
 
   ...configSchema.api,
   ...configSchema.mail,
@@ -31,6 +33,12 @@ const config = {
 
   service: {
     mail: common('mail', envVars),
+  },
+
+  mongo: {
+    username: envVars.MONGO_USERNAME,
+    server: envVars.MONGO_SERVERS,
+    db: envVars.MONGO_DB,
   },
 };
 

@@ -46,6 +46,7 @@ if (!module.parent) {
 
 import {Worker} from 'comunik8-common';
 const worker = new Worker({
+  maxWorkers: 1,
   tasks: {
     runEverySecond: {
       module: `${__dirname}/task`,
@@ -54,9 +55,5 @@ const worker = new Worker({
     },
   },
 });
-
-setInterval(() => {
-  console.log(JSON.stringify(worker.stats()));
-}, 1000);
 
 export default app;
