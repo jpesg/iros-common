@@ -1,6 +1,6 @@
 {
   "name": "comunik8-common",
-  "version": "1.0.54",
+  "version": "1.0.541",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
