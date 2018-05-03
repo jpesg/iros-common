@@ -28,7 +28,7 @@ function post(path, data, authorization, override_options = {}) {
         authorization,
       },
     },
-    ...override_options
+    ...override_options,
   });
 }
 
@@ -42,7 +42,7 @@ function get(path, data = {}, authorization = null, override_options = {}) {
         authorization,
       },
     },
-    ...override_options
+    ...override_options,
   });
 }
 
@@ -58,12 +58,12 @@ function do_delete(path, data = {}, authorization = null, override_options = {})
       },
 
     },
-    ...override_options
+    ...override_options,
   });
 }
 
 function send(options) {
-  if (options.headers && options.headers.authorization) {
+  if (options.headers && options.headers.authorization && !options.headers.authorization.match('^JWT ')) {
     options.headers.authorization = `JWT ${options.headers.authorization}`;
   }
 
