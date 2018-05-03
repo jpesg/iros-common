@@ -1,15 +1,16 @@
 import userService from '../service/user';
+import {UnauthorizedHttpError} from '../errors/http.error'
 
-const authenticate = (app = '', role = 'user', section = null) => {
+const authenticate = (role = 'user', section = null) => {
   return (req, res, next) => {
     let auth = req.get('Authorization');
 
     if (!auth) auth = req.body.jwt;
 
-    if (!auth) return next(new Error('Missing Authorization header'));
-    if (!auth.match(/^JWT .*$/)) return next(new Error('Only JWT Auth is supported'));
+    if (!auth) return next(new UnauthorizedHttpError('Missing Authorization header'));
+    if (!auth.match(/^JWT .*$/)) return next(new UnauthorizedHttpError('Only JWT Auth is supported'));
 
-    return userService.canAccess(auth.replace(/^JWT /, ''), app, role, section)
+    return userService.canAccess(auth.replace(/^JWT /, ''), role, section)
         .then(u => {
           req.user = u;
           next();
