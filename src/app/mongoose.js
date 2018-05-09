@@ -1,7 +1,15 @@
 import mongoose from 'mongoose';
 import fs from 'fs';
 
-const configure = (config) => {
+let mongoUri, mongoOptions;
+
+const connect = () => {
+  return mongoose.connect(mongoUri, mongoOptions);
+};
+
+const disconnect = () => mongoose.disconnect();
+
+const configure = (config, connect_automatically = true) => {
   // make bluebird default Promise
   Promise = require('bluebird');
 
@@ -9,7 +17,7 @@ const configure = (config) => {
   mongoose.Promise = Promise;
 
   // connect to mongo db
-  let mongoOptions = {authSource: config.mongo.db};
+  mongoOptions = {authSource: config.mongo.db};
   if (config.mongo.server.indexOf(',') >= 0) mongoOptions.replicaSet = config.mongo.rs;
   if (config.mongo.cert) {
     mongoOptions = {
@@ -24,11 +32,15 @@ const configure = (config) => {
   if (config.mongo.password) credentials += `:${config.mongo.password}`;
   if (credentials.length) credentials += '@';
 
-  const mongoUri = `mongodb://${credentials}${config.mongo.server}/${config.mongo.db}`;
-  mongoose.connect(mongoUri, mongoOptions);
-  mongoose.connection.on('error', (e) => {
-    throw new Error(`unable to connect to database: ${mongoUri} ${e}`);
-  });
+  mongoUri = `mongodb://${credentials}${config.mongo.server}/${config.mongo.db}`;
+
+  if (connect_automatically) {
+    mongoose.connection.on('error', (e) => {
+      throw new Error(`unable to connect to database: ${mongoUri} ${e}`);
+    });
+    connect();
+  }
 };
 
 export default configure;
+export {connect, disconnect};

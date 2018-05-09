@@ -32,7 +32,7 @@ import tinyUrlService from './service/tinyurl';
 import userService from './service/user';
 
 //db
-import configureMongoose from './app/mongoose';
+import configureMongoose, {connect as connectMongoose, disconnect as disconnectMongoose} from './app/mongoose';
 
 //workers
 import Worker from './worker/pool';
@@ -53,6 +53,8 @@ export {
 
   //db
   configureMongoose,
+  connectMongoose,
+  disconnectMongoose,
 
   //auth
   configureAuth,
