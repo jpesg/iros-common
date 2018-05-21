@@ -1,5 +1,5 @@
 {
-  "name": "comunik8-common",
+  "name": "iros-common",
   "version": "1.0.546",
   "description": "",
   "main": "dist/index.js",
@@ -10,14 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/comunik8/common.git"
+    "url": "git+https://github.com/RevolutionGeneration/iros-common"
   },
   "author": "comunik8@comunik8.co.uk",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/comunik8/common/issues"
-  },
-  "homepage": "https://github.com/comunik8/common#readme",
+  "homepage": "https://github.com/RevolutionGeneration/iros-common",
   "dependencies": {
     "amqplib": "^0.5.2",
     "bluebird": "^3.5.1",
