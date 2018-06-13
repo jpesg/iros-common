@@ -1,6 +1,6 @@
 {
   "name": "iros-common",
-  "version": "1.0.547",
+  "version": "1.0.548",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -16,7 +16,6 @@
   "license": "ISC",
   "homepage": "https://github.com/RevolutionGeneration/iros-common",
   "dependencies": {
-    "amqplib": "^0.5.2",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
@@ -35,6 +34,7 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.51",
     "babel-cli": "^7.0.0-beta.3",
     "babel-core": "^7.0.0-beta.3",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -47,7 +47,7 @@
     "del": "^3.0.0",
     "express": "^4.16.2",
     "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.1",
+    "gulp-babel": "^8.0.0-beta.2",
     "gulp-load-plugins": "^1.5.0",
     "gulp-newer": "^1.4.0",
     "gulp-nodemon": "^2.2.1",
