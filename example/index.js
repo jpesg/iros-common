@@ -4,7 +4,7 @@ import express from 'express';
 import config from './config';
 
 //import config helpers
-import {configureLogger, configureAuth, configureApp, configureServices, configureMongoose, authApi, mailService} from 'comunik8-common';
+import {configureLogger, configureAuth, configureApp, configureServices, configureMongoose, authApi, mailService, logger} from 'iros-common';
 
 // init logs
 configureLogger();
@@ -38,13 +38,13 @@ const app = configureApp(router);
 if (!module.parent) {
   // listen on port config.port
   app.listen(config.port, () => {
-    console.info(`server started on port ${config.port} (${config.env})`);
+    logger.info(`server started on port ${config.port} (${config.env})`);
   });
 }
 
 //configure workers
 
-import {Worker} from 'comunik8-common';
+import {Worker} from 'iros-common';
 const worker = new Worker({
   maxWorkers: 1,
   tasks: {

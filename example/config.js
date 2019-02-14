@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {config as common, configSchema} from 'comunik8-common';
+import {config as common, configSchema} from 'iros-common';
 
 // require and configure dotenv, will load vars in .env in PROCESS.ENV
 require('dotenv').config();
