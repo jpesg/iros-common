@@ -7,8 +7,8 @@ const configure = (config) => {
   service = config.mail;
 };
 
-function send({sender, from, to, subject, html, text}) {
-  return post('mail', {sender, from, to, subject, html, text});
+function send({sender, from, to, subject, html, text, bcc, attachment}) {
+  return post('mail', {sender, from, to, subject, html, text, bcc, attachment});
 }
 
 function sendError(message, level = 'error', info = '') {
