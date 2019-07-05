@@ -1,24 +1,36 @@
-import mongoose from 'mongoose';
 import fs from 'fs';
+import logger from '../logger/logger';
 
-let mongoUri, mongoOptions;
+let mongoUri, mongoOptions = {};
 
-const connect = () => {
-  return mongoose.connect(mongoUri, mongoOptions);
-};
+const notConfigured = () => new Error('Not Configured');
+let connect = notConfigured,
+    disconnect = notConfigured;
 
-const disconnect = () => mongoose.disconnect();
+const configure = (config, mongoose = null, connect_automatically = true) => {
+  mongoose = mongoose || require('mongoose');
 
-const configure = (config, connect_automatically = true) => {
+  connect = () => mongoose.connect(mongoUri, mongoOptions, error => {
+    if (error) logger.error('failed to connect to mongodb', {mongoUri, mongoOptions});
+  });
+
+  disconnect = () => mongoose.disconnect();
+
   // make bluebird default Promise
   Promise = require('bluebird');
 
   // plugin bluebird promise in mongoose
   mongoose.Promise = Promise;
 
+  // define options
+  mongoOptions.useNewUrlParser = true;
+  mongoOptions.authSource = config.mongo.authdb && config.mongo.authdb.length ? config.mongo.authdb : config.mongo.db;
+
   // connect to mongo db
-  mongoOptions = {authSource: config.mongo.db};
-  if (config.mongo.server.indexOf(',') >= 0) mongoOptions.replicaSet = config.mongo.rs;
+  if (config.mongo.servers.indexOf(',') >= 0) mongoOptions.replicaSet = config.mongo.rs;
+  if (config.mongo.ssl) {
+    mongoOptions.ssl = true;
+  }
   if (config.mongo.cert) {
     mongoOptions = {
       ...mongoOptions,
@@ -32,12 +44,10 @@ const configure = (config, connect_automatically = true) => {
   if (config.mongo.password) credentials += `:${config.mongo.password}`;
   if (credentials.length) credentials += '@';
 
-  mongoUri = `mongodb://${credentials}${config.mongo.server}/${config.mongo.db}`;
+  mongoUri = `mongodb://${credentials}${config.mongo.servers}/${config.mongo.db}`;
 
   if (connect_automatically) {
-    mongoose.connection.on('error', (e) => {
-      throw new Error(`unable to connect to database: ${mongoUri} ${e}`);
-    });
+    mongoose.connection.on('error', error => logger.error('unable to connect to database', {mongoUri, mongoOptions, error}));
     connect();
   }
 };
