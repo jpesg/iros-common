@@ -1,6 +1,6 @@
 {
   "name": "iros-common",
-  "version": "1.0.549",
+  "version": "1.0.55",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
