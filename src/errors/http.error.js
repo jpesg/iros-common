@@ -41,3 +41,8 @@ export class ValidationHttpError extends HttpError {
   }
 }
 
+export class HttpErrorFactory {
+  constructor({message, isPublic, errors, status}) {
+    return new HttpError(message, isPublic, errors, status);
+  }
+}

@@ -1,5 +1,6 @@
 import request from 'request-promise';
-import ApiHttpError from '../errors/http.error';
+import {HttpErrorFactory} from '../errors/http.error';
+import _ from 'lodash';
 
 let service = {};
 let app = 'unknown';
@@ -67,7 +68,17 @@ function send(options) {
     options.headers.authorization = `JWT ${options.headers.authorization}`;
   }
 
-  return request(options);
+  return request(options)
+      .then(body => body)
+      .catch(r => {
+        const message = _.get(r, 'error.message', 'Failed to request User Service'),
+            errors = _.get(r, 'error.errors', {}),
+            isPublic = r.statusCode !== 500,
+            status = r.statusCode || 500;
+
+        return Promise.reject(new HttpErrorFactory({message, isPublic, errors, status}));
+      });
+
 }
 
 function requestPasswordReset(email) {
