@@ -30,8 +30,8 @@ const options = {
         default: 'Threw an error when running default method',
       },
       array: {
-        at_least_one: 'You need to have one main driver',
-        at_most_one: 'You can have only one main driver',
+        at_least_one: 'At least one is required',
+        at_most_one: 'Only one is allowed',
       },
       string: {
         base: 'Must be a string',
