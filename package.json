@@ -1,6 +1,6 @@
 {
   "name": "iros-common",
-  "version": "1.0.551",
+  "version": "1.0.611",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -24,7 +24,9 @@
     "http-status": "^1.0.1",
     "joi": "^13.1.2",
     "jsonwebtoken": "^8.2.1",
+    "lodash": "^4.17.15",
     "method-override": "^2.3.10",
+    "moment": "^2.24.0",
     "mongoose": "^5.6.3",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
