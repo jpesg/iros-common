@@ -37,6 +37,15 @@ import configureMongoose, {connect as connectMongoose, disconnect as disconnectM
 //workers
 import Worker from './worker/pool';
 
+//validation
+import validate from './validation/joi.validation';
+
+// libs
+import lodash from 'lodash';
+import moment from 'moment';
+import mongoose from 'mongoose';
+import request from 'request-promise';
+
 const configureServices = (config, app) => [
   dialerService,
   lookupService,
@@ -95,4 +104,10 @@ export {
 
   //workers
   Worker,
+
+  //validations
+  validate,
+
+  // libs
+  lodash, moment, mongoose, request,
 };

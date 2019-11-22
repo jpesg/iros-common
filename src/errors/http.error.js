@@ -35,3 +35,9 @@ export class BadRequestHttpError extends HttpError {
   }
 }
 
+export class ValidationHttpError extends HttpError {
+  constructor(errors = {}, message = 'Validation Error', isPublic = true, status = httpStatus.BAD_REQUEST) {
+    super(message, isPublic, errors, status);
+  }
+}
+
