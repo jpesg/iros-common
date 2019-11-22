@@ -67,13 +67,7 @@ function send(options) {
     options.headers.authorization = `JWT ${options.headers.authorization}`;
   }
 
-  return request(options)
-      .then(body => body)
-      .catch(err => {
-        const message = err.error && err.error.message ? err.error.message : 'Failed to request User Service';
-        return Promise.reject(new ApiHttpError(message, true, {}, err.statusCode || 500));
-      });
-
+  return request(options);
 }
 
 function requestPasswordReset(email) {
