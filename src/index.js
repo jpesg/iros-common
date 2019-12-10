@@ -46,6 +46,8 @@ import moment from 'moment';
 import mongoose from 'mongoose';
 import request from 'request-promise';
 import express from 'express';
+import dotenv from 'dotenv';
+import joi from 'joi';
 
 const configureServices = (config, app) => [
   dialerService,
@@ -111,5 +113,5 @@ export {
   validate,
 
   // libs
-  lodash, moment, mongoose, request, express
+  lodash, moment, mongoose, request, express, dotenv, joi,
 };
