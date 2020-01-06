@@ -1,4 +1,4 @@
-import express from 'express';
+import {express} from 'iros-common';
 
 // config should be imported before importing any other file
 import config from './config';
@@ -43,7 +43,7 @@ if (!module.parent) {
 }
 
 //configure workers
-
+/*
 import {Worker} from 'iros-common';
 const worker = new Worker({
   maxWorkers: 1,
@@ -55,5 +55,6 @@ const worker = new Worker({
     },
   },
 });
+ */
 
 export default app;

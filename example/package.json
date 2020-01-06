@@ -6,8 +6,7 @@
     "start": "gulp serve"
   },
   "dependencies": {
-    "dotenv": "^5.0.1",
-    "iros-common": "^1.0.548"
+    "iros-common": "^1.0.628"
   },
   "babel": {
     "presets": [
@@ -26,29 +25,34 @@
       "babel-plugin-add-module-exports"
     ]
   },
-  "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-class-properties": "^7.3.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.3.2",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/register": "^7.0.0",
-    "babel-loader": "^8.0.5",
-    "babel-plugin-add-module-exports": "^1.0.0",
-    "babel-plugin-transform-builtin-extend": "^1.1.2",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "coveralls": "^2.11.6",
-    "cross-env": "3.1.3",
-    "del": "^2.2.0",
-    "gulp": "^4.0.0",
+  "devDependencies2": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/register": "^7.7.7",
+    "coveralls": "^3.0.9",
+    "cross-env": "^6.0.3",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
-    "gulp-load-plugins": "^1.5.0",
+    "gulp-load-plugins": "^2.0.1",
     "gulp-newer": "^1.4.0",
     "gulp-nodemon": "^2.4.2",
-    "gulp-sourcemaps": "^2.6.4",
+    "gulp-sourcemaps": "^2.6.5",
     "gulp-util": "^3.0.8",
     "path": "^0.12.7",
     "run-sequence": "^2.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
+    "@babel/register": "^7.7.7",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-newer": "^1.4.0"
   }
 }
