@@ -1,25 +1,25 @@
-import util from 'util';
-import winston from 'winston';
+import Transport from 'winston-transport';
 import mail from '../service/mail';
 
-const logger = winston.transports.mail = function(options = {}) {
-  this.name = 'mail.service';
-  this.level = options.level || 'warn';
-};
+class Mail extends Transport {
+  constructor(opts) {
+    super(opts);
+    this.name = 'Mail';
+  }
 
-util.inherits(logger, winston.Transport);
+  log(info, callback) {
+    setImmediate(() => this.emit('logged', info));
+    return callback(null, true);
 
-logger.prototype.log = function(level, msg, meta, callback) {
-  //enabled only in production
-  if (process.env !== 'production') return callback(null, true);
+    //todo implement 3rd party service
 
-  //exclude api 404
-  if (JSON.stringify(meta).match(/Error: API not found/i)) return callback(null, true);
+    //enabled only in production
+    if (process.env !== 'production') return callback(null, true);
 
-  mail.sendError(msg, level, meta)
-      .then(res => callback(null, true))
-      .catch(e => callback(e, false));
-};
+    //exclude api 404
+    if (JSON.stringify(message).match(/Error: API not found/i)) return callback(null, true);
+  }
+}
 
-export default logger;
+export default Mail;
 

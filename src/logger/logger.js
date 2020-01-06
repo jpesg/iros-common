@@ -1,26 +1,28 @@
-import winston from 'winston';
-import Mail from './logger.mail.service';
+import {format, createLogger, transports} from 'winston';
+import LoggerMail from './logger.mail.service';
 
-const transports = [
+const default_transports = [
   {
     'name': 'console',
-    'fn': new (winston.transports.Console)({
-      json: true,
-      colorize: true,
-      timestamp: true,
-    }),
+    'fn': new transports.Console(),
   },
   {
     'name': 'iros-mail',
-    'fn': new Mail,
+    'fn': new LoggerMail(),
   },
 ];
 
 let _logger = console;
 
-export const configureLogger = (use_transports = ['console', 'iros-mail']) => {
-  _logger = new (winston.Logger)({transports: use_transports.map(t => (transports.find(f => f.name === t) || {}).fn).filter(f => f)});
-};
+export const configureLogger = (use_transports = ['console', 'iros-mail']) =>
+    _logger = createLogger({
+      format: format.combine(
+          format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+          format.json({space: 2}),
+          format.colorize({all: true}),
+      ),
+      transports: use_transports.map(t => (default_transports.find(f => f.name === t) || {}).fn).filter(f => f),
+    });
 
 const logger = {
   info: (...args) => _logger.info(...args),
