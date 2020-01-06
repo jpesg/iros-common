@@ -23,6 +23,7 @@ const configure = (config, mongoose = null, connect_automatically = true) => {
   mongoose.Promise = Promise;
 
   // define options
+  mongoOptions.useUnifiedTopology = true;
   mongoOptions.useNewUrlParser = true;
   mongoOptions.authSource = config.mongo.authdb && config.mongo.authdb.length ? config.mongo.authdb : config.mongo.db;
 
