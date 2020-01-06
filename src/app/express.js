@@ -38,6 +38,8 @@ const configureApp = (routes) => {
       message: err.isPublic ? err.message : status,
       stack: dev ? err.stack : {},
       errors: err.errors || {},
+      isPublic: err.isPublic || false,
+      status: err.status || 500,
     });
   });
 
