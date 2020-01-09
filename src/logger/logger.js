@@ -4,7 +4,11 @@ import LoggerMail from './logger.mail.service';
 const default_transports = [
   {
     'name': 'console',
-    'fn': new transports.Console(),
+    'fn': new transports.Console({
+      format: format.combine(
+          format.colorize({all: true}),
+      ),
+    }),
   },
   {
     'name': 'iros-mail',
@@ -19,7 +23,6 @@ export const configureLogger = (use_transports = ['console', 'iros-mail']) =>
       format: format.combine(
           format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
           format.json({space: 2}),
-          format.colorize({all: true}),
       ),
       transports: use_transports.map(t => (default_transports.find(f => f.name === t) || {}).fn).filter(f => f),
     });
