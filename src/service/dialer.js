@@ -7,8 +7,8 @@ const configure = (config) => {
   service = config.dialer;
 };
 
-function scheduleCall({first_name, surname, mobile, email, type, data = {}}) {
-  return send('lead/add', {first_name, surname, mobile, email, type, data: JSON.stringify(data)});
+function scheduleCall({first_name, surname, mobile, email, type, data = {}, delay = 0}) {
+  return send('lead/add', {first_name, surname, mobile, email, type, data: JSON.stringify(data), delay});
 }
 
 function cancelCall({mobile, type}) {
