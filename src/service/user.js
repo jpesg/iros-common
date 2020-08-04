@@ -107,6 +107,11 @@ function deleteUser(email, jwt) {
       });
 }
 
+function foreDeleteUser(email,jwt){
+  const data = {email, app};
+  return do_delete('/user', data, jwt);
+}
+
 function addRole(email, role, section, jwt) {
   const data = {email, app, role, section};
   return post('/user/role', data, jwt);
@@ -118,4 +123,4 @@ function deleteRole(email, role, section, jwt) {
   return do_delete('/user/role', data, jwt);
 }
 
-export default {login, canAccess, requestPasswordReset, resetPassword, getUsers, createUser, addRole, deleteRole, deleteUser, configure};
+export default {login, canAccess, requestPasswordReset, resetPassword, getUsers, createUser, addRole, deleteRole, deleteUser, foreDeleteUser, configure};
