@@ -57,4 +57,16 @@ const worker = new Worker({
 });
  */
 
+//configure workflow
+/*
+import {Workflow, WorkflowStep} from 'iros-common';
+
+const steps = [
+  new WorkflowStep({state: 'A', next: 'B', fn: context => Promise.resolve(context)}),
+  new WorkflowStep({state: 'B', fn: context => Promise.resolve({...context, next: 'C'})}),
+  new WorkflowStep({state: 'C', next: 'D', fn: context => Promise.resolve(context)}),
+];
+const workflow = new Workflow(steps)
+*/
+
 export default app;
