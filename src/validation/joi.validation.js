@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import {ValidationHttpError} from '../errors/http.error';
 
+// note find out more options here: https://github.com/sideway/joi/blob/master/API.md#anyvalidatevalue-options
 const options = {
       allowUnknownHeaders: true,
       allowUnknownBody: true,
@@ -18,87 +19,80 @@ const options = {
       params: 'allowUnknownParams',
       cookies: 'allowUnknownCookies',
     },
-    // see more @ https://github.com/hapijs/joi/blob/v13.0.2/lib/language.js
-    language = {
-      key: '',
-      any: {
-        unknown: 'Not allowed',
-        invalid: 'Contains an invalid value',
-        empty: 'Not allowed to be empty',
-        required: 'Required',
-        allowOnly: 'Invalid value',
-        default: 'Threw an error when running default method',
-      },
-      array: {
-        at_least_one: 'At least one is required',
-        at_most_one: 'Only one is allowed',
-      },
-      string: {
-        base: 'Must be a string',
-        min: 'Must be at least {{limit}} characters long',
-        max: 'Must be less than or equal to {{limit}} characters long',
-        length: 'Must be {{limit}} characters long',
-        alphanum: 'Must only contain alpha-numeric characters',
-        token: 'Must only contain alpha-numeric and underscore characters',
-        regex: {
-          base: 'Invalid format',
-          name: 'Invalid format',
-          invert: {
-            base: 'Invalid format',
-            name: 'Invalid format',
-          },
-        },
-        email: 'Must be a valid email',
-        uri: 'Must be a valid uri',
-        isoDate: 'Must be a valid ISO 8601 date',
-        guid: 'Must be a valid GUID',
-        hex: 'Must only contain hexadecimal characters',
-        base64: 'Must be a valid base64 string',
-        hostname: 'Must be a valid hostname',
-        lowercase: 'Must only contain lowercase characters',
-        uppercase: 'Must only contain uppercase characters',
-      },
-      number: {
-        base: 'Must be a number',
-        min: 'Must be larger than or equal to {{limit}}',
-        max: 'Must be less than or equal to {{limit}}',
-        less: 'Must be less than {{limit}}',
-        greater: 'Must be greater than {{limit}}',
-        float: 'Must be a float or double',
-        integer: 'Must be an integer',
-        negative: 'Must be a negative number',
-        positive: 'Must be a positive number',
-        precision: 'Must have no more than {{limit}} decimal places',
-        multiple: 'Must be a multiple of {{multiple}}',
-      },
-      date: {
-        min: 'Must be after {{limit}}',
-        max: 'Must be before {{limit}}',
-      },
-      object: {
-        legal_age: 'Date is before 18th birthday',
-      },
+    errors = {
+      label: false,
+    },
+    messages = {
+      // any
+      'any.unknown': 'Not allowed',
+      'any.invalid': 'Contains an invalid value',
+      'any.empty': 'Not allowed to be empty',
+      'any.required': 'Required',
+      'any.allowOnly': 'Invalid value',
+      'any.default': 'Threw an error when running default method',
+
+      // array
+      'array.at_least_one': 'At least one is required',
+      'array.at_most_one': 'Only one is allowed',
+
+      // string
+      'string.base': 'Must be a string',
+      'string.min': 'Must be at least {{limit}} characters long',
+      'string.max': 'Must be less than or equal to {{limit}} characters long',
+      'string.length': 'Must be {{limit}} characters long',
+      'string.alphanum': 'Must only contain alpha-numeric characters',
+      'string.token': 'Must only contain alpha-numeric and underscore characters',
+      'string.email': 'Must be a valid email',
+      'string.uri': 'Must be a valid uri',
+      'string.isoDate': 'Must be a valid ISO 8601 date',
+      'string.guid': 'Must be a valid GUID',
+      'string.hex': 'Must only contain hexadecimal characters',
+      'string.base64': 'Must be a valid base64 string',
+      'string.hostname': 'Must be a valid hostname',
+      'string.lowercase': 'Must only contain lowercase characters',
+      'string.uppercase': 'Must only contain uppercase characters',
+
+      // number
+      'number.base': 'Must be a number',
+      'number.min': 'Must be larger than or equal to {{limit}}',
+      'number.max': 'Must be less than or equal to {{limit}}',
+      'number.less': 'Must be less than {{limit}}',
+      'number.greater': 'Must be greater than {{limit}}',
+      'number.float': 'Must be a float or double',
+      'number.integer': 'Must be an integer',
+      'number.negative': 'Must be a negative number',
+      'number.positive': 'Must be a positive number',
+      'number.precision': 'Must have no more than {{limit}} decimal places',
+      'number.multiple': 'Must be a multiple of {{multiple}}',
+
+      // date
+      'date.min': 'Must be after {{limit}}',
+      'date.max': 'Must be before {{limit}}',
+
+      // object
+      'object.legal_age': 'Date is before 18th birthday',
     };
 
 const validate = (errObj, request, schema, location, allowUnknown) => {
   if (!request || !schema) return;
 
-  const joiOptions = {context: request, allowUnknown, abortEarly: false, language};
+  const joiOptions = {context: request, allowUnknown, abortEarly: false, messages, errors};
 
-  Joi.validate(request, schema, joiOptions, function(errors) {
-    if (!errors || !errors.details || !errors.details.length) return;
+  const validationResult = Joi.object(schema).validate(request, joiOptions);
 
-    errors.details.forEach(e => {
-      const path = _.isArray(e.path) ? e.path.join('.') : e.path;
+  if (!validationResult || !validationResult.error || !validationResult.error.details || !validationResult.error.details.length) return;
 
-      if (errObj[path]) return;
+  validationResult.error.details.forEach(e => {
+    const path = _.isArray(e.path) ? e.path.join('.') : e.path;
 
-      errObj[path] = e.message;
-      if (e.type === 'date.min' || e.type === 'date.max') {
-        errObj[path] = errObj[path].replace(e.context.limit, moment(e.context.limit).format('DD.MM.YYYY'));
-      }
-    });
+    if (errObj[path]) return;
+
+    errObj[path] = e.message;
+    if (e.type === 'date.min' || e.type === 'date.max') {
+      errObj[path] = errObj[path].replace(e.context.limit, moment(e.context.limit).format('DD.MM.YYYY'));
+    }
   });
+
 };
 
 export default (schema) => {
@@ -116,6 +110,6 @@ export default (schema) => {
       if (schema[key]) validate(errors, r[key], schema[key], key, allowUnknown);
     });
 
-    return next(_.isEmpty(errors) ? null : new ValidationHttpError( errors));
+    return next(_.isEmpty(errors) ? null : new ValidationHttpError(errors));
   };
 }
