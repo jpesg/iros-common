@@ -4,9 +4,9 @@ dotenv.config();
 
 // define validation for all the env vars
 const envVarsSchema = joi.object({
-  NODE_ENV: joi.string().allow(['development', 'production', 'test', 'provision']).default('development'),
+  NODE_ENV: joi.string().allow('development', 'production', 'test', 'provision').default('development'),
 
-  PORT: joi.number().default(4055),
+  PORT: joi.number().default(4070),
 
   MONGO_USERNAME: joi.string(),
   MONGO_DB: joi.string().required(),

@@ -6,7 +6,17 @@
     "start": "gulp serve"
   },
   "dependencies": {
-    "iros-common": "^1.0.628"
+    "iros-common": "^2.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
+    "@babel/register": "^7.7.7",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-newer": "^1.4.0"
   },
   "babel": {
     "presets": [
@@ -20,39 +30,7 @@
       ]
     ],
     "plugins": [
-      "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-object-rest-spread",
-      "babel-plugin-add-module-exports"
+      "@babel/plugin-proposal-class-properties"
     ]
-  },
-  "devDependencies2": {
-    "@babel/cli": "^7.7.7",
-    "@babel/core": "^7.7.7",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
-    "@babel/preset-env": "^7.7.7",
-    "@babel/register": "^7.7.7",
-    "coveralls": "^3.0.9",
-    "cross-env": "^6.0.3",
-    "del": "^5.1.0",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-load-plugins": "^2.0.1",
-    "gulp-newer": "^1.4.0",
-    "gulp-nodemon": "^2.4.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-util": "^3.0.8",
-    "path": "^0.12.7",
-    "run-sequence": "^2.2.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.7.7",
-    "@babel/core": "^7.7.7",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
-    "@babel/register": "^7.7.7",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-newer": "^1.4.0"
   }
 }
