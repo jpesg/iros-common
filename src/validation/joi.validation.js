@@ -73,28 +73,29 @@ const options = {
       'object.legal_age': 'Date is before 18th birthday',
     };
 
-const validate = (request, schema, location, allowUnknown) => {
-  if (!request || !schema) return;
+const validate = (data, schema, location, allowUnknown) => {
+  if (!data || !schema) return {};
 
-  const joiOptions = {context: request, allowUnknown, abortEarly: false, messages, errors};
+  const joiOptions = {context: data, allowUnknown, abortEarly: false, messages, errors},
+      joiSchema = Joi.object(schema).unknown().required();
 
-  const {error, value} = Joi.object(schema).validate(request, joiOptions),
-      errors = {};
+  const {error, value} = joiSchema.validate(data, joiOptions),
+      out_errors = {};
 
-  if (!error || !error.details || !error.details.length) return;
+  if (!error || !error.details || !error.details.length) return {value};
 
   error.error.details.forEach(e => {
     const path = _.isArray(e.path) ? e.path.join('.') : e.path;
 
-    if (errors[path]) return;
+    if (out_errors[path]) return;
 
-    errors[path] = e.message;
+    out_errors[path] = e.message;
     if (e.type === 'date.min' || e.type === 'date.max') {
-      errors[path] = errors[path].replace(e.context.limit, moment(e.context.limit).format('DD.MM.YYYY'));
+      out_errors[path] = out_errors[path].replace(e.context.limit, moment(e.context.limit).format('DD.MM.YYYY'));
     }
   });
 
-  return {errors, value};
+  return {errors: out_errors};
 };
 
 export default (schema) => {
@@ -111,7 +112,7 @@ export default (schema) => {
 
       if (schema[key]) {
         const {value, errors} = validate(r[key], schema[key], key, allowUnknown);
-        if (!errors && value) req[key] = value;
+        if (!errors && value) req[key] = {...req[key], ...value};
       }
     });
 
