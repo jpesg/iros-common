@@ -25,11 +25,9 @@ export default class Workflow {
   }
 
   withPeriodicPersistenceCheck(fn, interval) {
-    setInterval(async () => {
-      ((await fn()) || []).forEach(s => {
-        this.emitter.emit(s.state, {...s});
-      }, interval);
-    });
+    setInterval(
+        async () => ((await fn()) || []).forEach(s => this.emitter.emit(s.state, {...s})),
+        interval);
     return this;
   }
 
