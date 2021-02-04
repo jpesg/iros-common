@@ -10,9 +10,7 @@ export default class PersistentWorkflowStep extends WorkflowStep {
 
   async processWithPersistence(context) {
     return this.process(context)
-        .then(result => {
-          return Promise.all([result, this.persist({...context, ...result})]);
-        })
+        .then(result => Promise.all([result, this.persist({...result})]))
         .then(([result]) => result);
   }
 }
