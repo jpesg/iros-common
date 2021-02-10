@@ -84,7 +84,7 @@ const validate = (data, schema, location, allowUnknown) => {
 
   if (!error || !error.details || !error.details.length) return {value};
 
-  error.error.details.forEach(e => {
+  error.details.forEach(e => {
     const path = _.isArray(e.path) ? e.path.join('.') : e.path;
 
     if (out_errors[path]) return;
