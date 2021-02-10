@@ -37,9 +37,9 @@ const options = {
 
       // string
       'string.base': 'Must be a string',
-      'string.min': 'Must be at least {{limit}} characters long',
-      'string.max': 'Must be less than or equal to {{limit}} characters long',
-      'string.length': 'Must be {{limit}} characters long',
+      'string.min': 'Must be at least {{#limit}} characters long',
+      'string.max': 'Must be less than or equal to {{#limit}} characters long',
+      'string.length': 'Must be {{#limit}} characters long',
       'string.alphanum': 'Must only contain alpha-numeric characters',
       'string.token': 'Must only contain alpha-numeric and underscore characters',
       'string.email': 'Must be a valid email',
@@ -54,20 +54,20 @@ const options = {
 
       // number
       'number.base': 'Must be a number',
-      'number.min': 'Must be larger than or equal to {{limit}}',
-      'number.max': 'Must be less than or equal to {{limit}}',
-      'number.less': 'Must be less than {{limit}}',
-      'number.greater': 'Must be greater than {{limit}}',
+      'number.min': 'Must be larger than or equal to {{#limit}}',
+      'number.max': 'Must be less than or equal to {{#limit}}',
+      'number.less': 'Must be less than {{#limit}}',
+      'number.greater': 'Must be greater than {{#limit}}',
       'number.float': 'Must be a float or double',
       'number.integer': 'Must be an integer',
       'number.negative': 'Must be a negative number',
       'number.positive': 'Must be a positive number',
-      'number.precision': 'Must have no more than {{limit}} decimal places',
-      'number.multiple': 'Must be a multiple of {{multiple}}',
+      'number.precision': 'Must have no more than {{#limit}} decimal places',
+      'number.multiple': 'Must be a multiple of {{#multiple}}',
 
       // date
-      'date.min': 'Must be after {{limit}}',
-      'date.max': 'Must be before {{limit}}',
+      'date.min': 'Must be after {{#limit}}',
+      'date.max': 'Must be before {{#limit}}',
 
       // object
       'object.legal_age': 'Date is before 18th birthday',
