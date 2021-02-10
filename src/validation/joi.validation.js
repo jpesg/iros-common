@@ -103,16 +103,18 @@ export default (schema) => {
 
   return (req, res, next) => {
     const keys = ['headers', 'body', 'query', 'params', 'cookies'],
-        errors = {},
         r = _.pick(req, keys);
 
-    keys.forEach(function(key) {
+    let errors = {};
+
+    keys.forEach(key => {
       const options = _.defaults({}, schema.options || {}),
           allowUnknown = options[unknownMap[key]];
 
       if (schema[key]) {
-        const {value, errors} = validate(r[key], schema[key], key, allowUnknown);
-        if (!errors && value) req[key] = {...req[key], ...value};
+        const {value, errors: _errors} = validate(r[key], schema[key], key, allowUnknown);
+        if (!_errors && value) req[key] = {...req[key], ...value};
+        if (_errors) errors = {...errors, ..._errors};
       }
     });
 
