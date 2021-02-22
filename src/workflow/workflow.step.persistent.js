@@ -1,4 +1,5 @@
 import WorkflowStep from './workflow.step';
+import _ from 'lodash';
 
 export default class PersistentWorkflowStep extends WorkflowStep {
   constructor({state, next, fn, retrieve, persist}) {
