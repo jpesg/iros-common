@@ -37,20 +37,29 @@ router.post(
             plain_obj: {
                 bool: Joi.bool().required(),
             },
-            date: Joi.alternatives().conditional('str', {'switch':
-                  [
-                      {is: 'before',
-                          then: Joi.date()
-                              .max('now')
-                              .messages({'date.max': 'must be before today'})
-                              .required()},
-                      {is: 'after',
-                          then: Joi.date()
-                              .min('now')
-                              .messages({'date.min': 'must be after today'})
-                              .required()}
-                  ]})
-                .required()
+            // conditional validation
+            when: Joi.string().required(),
+            date: Joi.alternatives().conditional('when', {
+                'switch': [
+                    {
+                        is: 'before',
+                        then: Joi.date()
+                            .max(new Date())
+                            .messages({'date.max': 'must be before today'})
+                            .required(),
+                    },
+                    {
+                        is: 'after',
+                        then: Joi.date()
+                            .min(new Date())
+                            .messages({'date.min': 'must be after today'})
+                            .required(),
+                    },
+                ],
+                'otherwise': Joi.string().valid('today')
+                    .required()
+            })
+                .required(),
         },
     }),
     (req, res) => res.json({valid: true}),
