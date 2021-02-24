@@ -43,7 +43,7 @@ import WorkflowStep from './workflow/workflow.step';
 import PersistentWorkflowStep from './workflow/workflow.step.persistent';
 
 //validation
-import validate from './validation/joi.validation';
+import validate, {Joi as joi} from './validation/joi.validation';
 
 // libs
 import lodash from 'lodash';
@@ -52,7 +52,6 @@ import mongoose from 'mongoose';
 import request from 'request-promise';
 import express from 'express';
 import dotenv from 'dotenv';
-import joi from 'joi';
 
 const configureServices = (config, app) => [
   dialerService,

@@ -1,8 +1,11 @@
-import Joi from 'joi';
+import joi from 'joi';
+import joiDateExtension from '@hapi/joi-date';
 import _ from 'lodash';
 import moment from 'moment';
 
 import {ValidationHttpError} from '../errors/http.error';
+
+const Joi = joi.extend(joiDateExtension);
 
 // note find out more options here: https://github.com/sideway/joi/blob/master/API.md#anyvalidatevalue-options
 const options = {
@@ -97,6 +100,8 @@ const validate = (data, schema, location, allowUnknown) => {
 
   return {errors: out_errors};
 };
+
+export {Joi}
 
 export default (schema) => {
   if (!schema) throw new Error('Please provide validation schema');
