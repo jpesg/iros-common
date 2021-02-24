@@ -4,7 +4,7 @@ import {express} from 'iros-common';
 import config from './config';
 
 //import config helpers
-import {configureLogger, configureAuth, configureApp, configureServices, configureMongoose, authApi, mailService, logger} from 'iros-common';
+import {configureLogger, configureAuth, configureApp, configureServices, configureMongoose, authApi, mailService, logger, validate, joi as Joi} from 'iros-common';
 
 // init logs
 configureLogger();
@@ -12,31 +12,67 @@ configureLogger();
 // init auth
 configureAuth(config);
 
-// init database
-configureMongoose(config);
+/*
+ * init database
+ * configureMongoose(config);
+ */
 
 // init services
 configureServices(config.service, config.app);
 
 // configure routes
 const router = express.Router();
+
+// validation
+router.post(
+    '/validation',
+    validate({
+        body: {
+            str: Joi.string().required(),
+            obj: Joi.object()
+                .keys({
+                    int: Joi.number().required(),
+                })
+                .required(),
+            plain_obj: {
+                bool: Joi.bool().required(),
+            },
+            date: Joi.alternatives().conditional('str', {'switch':
+                  [
+                      {is: 'before',
+                          then: Joi.date()
+                              .max('now')
+                              .messages({'date.max': 'must be before today'})
+                              .required()},
+                      {is: 'after',
+                          then: Joi.date()
+                              .min('now')
+                              .messages({'date.min': 'must be after today'})
+                              .required()}
+                  ]})
+                .required()
+        },
+    }),
+    (req, res) => res.json({valid: true}),
+);
+
 router.get(
-  '/auth-only',
-  // api authentication
-  authApi,
-  (req, res) => res.json({})
+    '/auth-only',
+    // api authentication
+    authApi,
+    (req, res) => res.json({}),
 );
 router.post(
-  '/send-mail',
-  // service usage
-  (req, res, next) => mailService.send({
-    sender: 'test@domain.com',
-    from: 'Test ACC <test@domain.com>',
-    to: 'example@domain.com',
-    subject: 'sample email',
-    html: '<div>Hello World</div>',
-    text: 'hello world',
-  })
+    '/send-mail',
+    // service usage
+    () => mailService.send({
+        sender: 'test@domain.com',
+        from: 'Test ACC <test@domain.com>',
+        to: 'example@domain.com',
+        subject: 'sample email',
+        html: '<div>Hello World</div>',
+        text: 'hello world',
+    }),
 );
 
 // init app
@@ -47,10 +83,10 @@ const app = configureApp(router);
  * src: https://github.com/mochajs/mocha/issues/1912
  */
 if (!module.parent) {
-  // listen on port config.port
-  app.listen(config.port, () => {
-    logger.info(`server started on port ${config.port} (${config.env})`);
-  });
+    // listen on port config.port
+    app.listen(config.port, () => {
+        logger.info(`server started on port ${config.port} (${config.env})`);
+    });
 }
 
 //configure workers
