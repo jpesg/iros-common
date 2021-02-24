@@ -4,7 +4,8 @@ import {express} from 'iros-common';
 import config from './config';
 
 //import config helpers
-import {configureLogger, configureAuth, configureApp, configureServices, configureMongoose, authApi, mailService, logger, validate, joi as Joi} from 'iros-common';
+import {configureLogger, configureAuth, configureApp, configureServices, configureMongoose, authApi, mailService, logger, validate} from 'iros-common';
+import validationSchema from './validation';
 
 // init logs
 configureLogger();
@@ -12,10 +13,8 @@ configureLogger();
 // init auth
 configureAuth(config);
 
-/*
- * init database
- * configureMongoose(config);
- */
+// init database
+configureMongoose(config);
 
 // init services
 configureServices(config.service, config.app);
@@ -26,42 +25,7 @@ const router = express.Router();
 // validation
 router.post(
     '/validation',
-    validate({
-        body: {
-            str: Joi.string().required(),
-            obj: Joi.object()
-                .keys({
-                    int: Joi.number().required(),
-                })
-                .required(),
-            plain_obj: {
-                bool: Joi.bool().required(),
-            },
-            // conditional validation
-            when: Joi.string().required(),
-            date: Joi.alternatives().conditional('when', {
-                'switch': [
-                    {
-                        is: 'before',
-                        then: Joi.date()
-                            .max(new Date())
-                            .messages({'date.max': 'must be before today'})
-                            .required(),
-                    },
-                    {
-                        is: 'after',
-                        then: Joi.date()
-                            .min(new Date())
-                            .messages({'date.min': 'must be after today'})
-                            .required(),
-                    },
-                ],
-                'otherwise': Joi.string().valid('today')
-                    .required()
-            })
-                .required(),
-        },
-    }),
+    validate({body: validationSchema}),
     (req, res) => res.json({valid: true}),
 );
 
