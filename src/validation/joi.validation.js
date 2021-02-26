@@ -32,6 +32,7 @@ const options = {
       'any.empty': 'Not allowed to be empty',
       'any.required': 'Required',
       'any.allowOnly': 'Invalid value',
+      'any.only': 'Invalid value',
       'any.default': 'Threw an error when running default method',
 
       // array
