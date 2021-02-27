@@ -25,7 +25,7 @@ export default class WorkflowStep {
 
   async run(context) {
     const {_next, ...processedContext} = await this.process(context),
-        persistedContext = this.persist(processedContext);
+        persistedContext = await this.persist(processedContext);
 
     return Promise.resolve({...persistedContext, _next});
   }
