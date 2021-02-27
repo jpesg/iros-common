@@ -1,16 +1,32 @@
+import {logger} from '../index';
+
 export default class WorkflowStep {
-  constructor({state, next, fn}) {
+
+  /**
+   *
+   * @param state
+   * @param process - should calculate new values - should return {context, _next}
+   * @param persist - should contain a function to save everything from processed then retrieve persisted - should return {context}
+   * @param retrieveAll - should return all for this workflow (runs only after an app starts)
+   */
+  constructor({state, process, persist, retrieveAll}) {
+    [process, persist, retrieveAll].forEach(fn => {
+      if (typeof fn !== 'function') {
+        logger.error({'step': 'failed to create workflow step', e: `${fn} is not a function but ${typeof fn}`, name});
+        throw new Error(`not a function`);
+      }
+    });
+
     this.state = state;
-    this.next = next;
-    this.fn = fn;
+    this.process = process;
+    this.persist = persist;
+    this.retrieveAll = retrieveAll;
   }
 
-  async process(context) {
-    try {
-      const result = await this.fn(context);
-      return Promise.resolve({next: this.next, ...result});
-    } catch (e) {
-      return Promise.reject(e);
-    }
+  async run(context) {
+    const {_next, ...processedContext} = await this.process(context),
+        persistedContext = this.persist(processedContext);
+
+    return Promise.resolve({...persistedContext, _next});
   }
 }

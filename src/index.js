@@ -40,7 +40,6 @@ import Worker from './worker/pool';
 //workflow
 import Workflow from './workflow/workflow';
 import WorkflowStep from './workflow/workflow.step';
-import PersistentWorkflowStep from './workflow/workflow.step.persistent';
 
 //validation
 import validate, {Joi as joi} from './validation/joi.validation';
@@ -116,7 +115,6 @@ export {
   //workflow
   Workflow,
   WorkflowStep,
-  PersistentWorkflowStep,
 
   //validations
   validate,

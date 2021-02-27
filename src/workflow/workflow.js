@@ -9,37 +9,33 @@ export default class Workflow {
   constructor(steps) {
     this.emitter = new EventEmitter();
     this._registerListeners(this.emitter, steps);
-
-    return this;
-  }
-
-  withUniqueEvents({identifier}) {
-    this._uniqueEventsIdenfier = identifier;
-    return this;
-  }
-
-  withPersistence() {
-    this._withPersistence = true;
     this._retrievePersisted();
+
     return this;
   }
 
-  withPeriodicPersistenceCheck(fn, interval) {
-    setInterval(
-        async () => ((await fn()) || []).forEach(s => this.emitter.emit(s.state, {...s})),
-        interval);
+  withPeriodicCheck(fn, interval) {
+    setInterval(async () => ((await fn()) || []).forEach(s => this.emitter.emit(s.state, {...s})), interval);
     return this;
   }
 
+  // retrieve all unfinished on app start
   _retrievePersisted() {
     this.steps.reverse().map(async step => {
-      ((await step.retrieve()) || []).forEach(s => {
+      ((await step.retrieveAll()) || []).forEach(s => {
         this.emitter.emit(s.state, {...s});
       });
     });
   }
 
+  // unique identifiers
   _uniqueEvents = {};
+  _uniqueEventsIdentifier = false;
+
+  withUniqueEvents({identifier}) {
+    this._uniqueEventsIdenfier = identifier;
+    return this;
+  }
 
   _uniqueEventsStart(context) {
     if (!this._uniqueEventsIdenfier) return true;
@@ -58,21 +54,24 @@ export default class Workflow {
     return true;
   }
 
+  // listeners and run
   _registerListeners(emitter, steps) {
     this.steps = steps;
-    steps.map(step => emitter.on(step.state, this._processStep(step)));
-    emitter.on('error', logger.error);
+    steps.map(step => emitter.on(step.state, this._run(step)));
   }
 
-  _processStep(step) {
+  _run(step) {
     return ({...context}) => {
       if (!this._uniqueEventsStart(context)) return;
-      step[this._withPersistence ? 'processWithPersistence' : 'process'](context)
-          .then(({next, ...context}) => {
+      step.run(context)
+          .then(({next, ...persistedContext}) => {
             this._uniqueEventsFinish(context);
-            if (next) this.emitter.emit(next, context);
+            if (next) this.emitter.emit(next, persistedContext);
           })
-          .catch(e => this.emitter.emit('error', e));
+          .catch(error => {
+            logger.error({msg: 'step failed', error});
+            return this.emitter.emit('error', error);
+          });
     };
   }
 }
