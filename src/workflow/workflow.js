@@ -64,9 +64,9 @@ export default class Workflow {
     return ({...context}) => {
       if (!this._uniqueEventsStart(context)) return;
       step.run(context)
-          .then(({next, ...persistedContext}) => {
+          .then(({_next, ...persistedContext}) => {
             this._uniqueEventsFinish(context);
-            if (next) this.emitter.emit(next, persistedContext);
+            if (_next) this.emitter.emit(_next, persistedContext);
           })
           .catch(error => {
             logger.error({msg: 'step failed', error});
