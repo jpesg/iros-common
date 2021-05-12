@@ -1,6 +1,7 @@
 import request from 'request-promise';
 import {HttpErrorFactory} from '../errors/http.error';
 import _ from 'lodash';
+import logger from '../logger/logger';
 
 let service = {};
 let app = 'unknown';
@@ -62,6 +63,11 @@ const configure = (config, app_name) => {
     post('/app/settings', {
         app,
         sections: service.sections
+    }).catch(e => {
+        logger.error({
+            'msg': 'failed to setup app and sections on user service',
+            e
+        });
     });
 };
 
