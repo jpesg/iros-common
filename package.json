@@ -1,6 +1,6 @@
 {
   "name": "iros-common",
-  "version": "2.0.29",
+  "version": "2.0.30",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -36,8 +36,7 @@
     "passport-local": "^1.0.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
-    "winston": "^3.3.3",
-    "winston-transport": "^4.4.0"
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
@@ -48,6 +47,8 @@
     "chai": "^4.2.0",
     "cross-env": "^7.0.3",
     "del": "^6.0.0",
+    "eslint": "^7.24.0",
+    "eslint-config-iros-lint": "^1.0.6",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-load-plugins": "^2.0.6",
