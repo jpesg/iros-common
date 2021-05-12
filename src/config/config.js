@@ -4,8 +4,11 @@ const getServiceUrl = (service) => `${service.toUpperCase()}_URL`,
     getServiceKey = (service) => `${service.toUpperCase()}_KEY`;
 
 const schema = {
-    api: {API_KEY: Joi.string().required(), },
-    user: {USER_URL: Joi.string().required(), },
+    api: {API_KEY: Joi.string().required()},
+    user: {
+        USER_URL: Joi.string().required(),
+        USER_SECTIONS: Joi.string().required()
+    },
 };
 
 const services = [
@@ -36,6 +39,10 @@ const config = (service, envVars = {}) => {
 
     if (schema[service] && schema[service][getServiceKey(service)]) {
         out.key = envVars[getServiceKey(service)];
+    }
+
+    if (service === 'user' && schema[service] && schema[service].USER_SECTIONS) {
+        out.sections = envVars.USER_SECTIONS.split(',');
     }
 
     return out;
