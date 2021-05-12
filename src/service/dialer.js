@@ -4,31 +4,47 @@ import logger from '../logger/logger';
 let service = {};
 
 const configure = (config) => {
-  service = config.dialer;
+    service = config.dialer;
 };
 
 function scheduleCall({first_name, surname, mobile, email, type, data = {}, delays = 0}) {
-  return send('lead/add', {first_name, surname, mobile, email, type, data: JSON.stringify(data), delays});
+    return send('lead/add', {
+        first_name,
+        surname,
+        mobile,
+        email,
+        type,
+        data: JSON.stringify(data),
+        delays
+    });
 }
 
 function cancelCall({mobile, type}) {
-  return send('lead/cancel', {mobile, type});
+    return send('lead/cancel', {
+        mobile,
+        type
+    });
 }
 
 function send(path, data = {}) {
-  const options = {
-    method: 'POST',
-    uri: `${service.url}/${path}?key=${service.key}`,
-    body: data,
-    json: true,
-  };
+    const options = {
+        method: 'POST',
+        uri: `${service.url}/${path}?key=${service.key}`,
+        body: data,
+        json: true,
+    };
 
-  return request(options)
-      .then(body => body)
-      .catch(err => {
-        logger.error(err);
-        return Promise.reject(new Error('Failed to request Dialer Service'));
-      });
+    return request(options)
+        .then(body => body)
+        .catch(err => {
+            logger.error(err);
+
+            return Promise.reject(new Error('Failed to request Dialer Service'));
+        });
 }
 
-export default {configure, cancelCall, scheduleCall};
+export default {
+    configure,
+    cancelCall,
+    scheduleCall
+};

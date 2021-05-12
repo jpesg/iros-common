@@ -183,7 +183,7 @@ export default class Pool {
       if (this.tasks.hasOwnProperty(i)) {
         const s = this.tasks[i];
         if (s.module === module && s.command === command) {
-          if (duration / 1000 > s.interval) logger.error(`Task took longer than expected ${module}/${command}. Expected: ${s.interval}. Took: ${Math.round(duration / 1000)}`);
+          if (duration / 1000 > s.interval) logger.info(`Task took longer than expected ${module}/${command}. Expected: ${s.interval}. Took: ${Math.round(duration / 1000)}`);
           s.stats.push({duration, error, timestamp: Date.now()});
           s.stats = s.stats.slice(-10);
           return;
