@@ -36,7 +36,7 @@ function getCaller() {
 
         return {
             function: match.groups.function,
-            file: match.groups.file.replace(__dirname.replace('/logger', ''), '')
+            file: match.groups.file.replace(`${__dirname.replace('/node_modules/iros-common/dist/logger', '')}/dist`, '')
         };
     }
 }
