@@ -1,37 +1,26 @@
 import {format, createLogger, transports} from 'winston';
-import LoggerMail from './logger.mail.service';
-
-const default_transports = [
-  {
-    'name': 'console',
-    'fn': new transports.Console({
-      format: format.combine(
-          format.colorize({all: true}),
-      ),
-    }),
-  },
-  {
-    'name': 'iros-mail',
-    'fn': new LoggerMail(),
-  },
-];
 
 let _logger = console;
 
-export const configureLogger = (use_transports = ['console', 'iros-mail']) =>
+export const configureLogger = (config) => {
     _logger = createLogger({
-      format: format.combine(
-          format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-          format.json({space: 2}),
-      ),
-      transports: use_transports.map(t => (default_transports.find(f => f.name === t) || {}).fn).filter(f => f),
+        format: format.combine(
+            format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+            format.json({space: 0}),
+        ),
+        level: 'info',
+        defaultMeta: {app: config?.app},
+        transports: [new transports.Console({})],
     });
 
+    return _logger;
+};
+
 const logger = {
-  info: (...args) => _logger.info(...args),
-  log: (...args) => _logger.log(...args),
-  warn: (...args) => _logger.warn(...args),
-  error: (...args) => _logger.error(...args),
+    info: (...args) => _logger.info(...args),
+    log: (...args) => _logger.log(...args),
+    warn: (...args) => _logger.warn(...args),
+    error: (...args) => _logger.error(...args),
 };
 
 export default logger;

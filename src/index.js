@@ -1,28 +1,28 @@
-//app
+//App
 import configureApp from './app/express';
 
-//auth
+//Auth
 import authApi from './auth/api.middleware';
 import authEmailPassword from './auth/email.password.middleware';
 import authJWT from './auth/jwt.middleware';
 import authUserRole from './auth/user.middleware';
 import configureAuth from './auth/passport';
 
-//config
+//Config
 import config, {schema as configSchema} from './config/config';
 
-//errors
+//Errors
 import BaseError from './errors/base.error';
 import HttpError, {ApiHttpError, UnauthorizedHttpError, BadRequestHttpError, NotFoundHttpError, HttpErrorFactory} from './errors/http.error';
 import {SkipWorkerError} from './errors/worker.error';
 
-//logger
+//Logger
 import logger, {configureLogger} from './logger/logger';
 
-//helpers
+//Helpers
 import numberHelper from './helpers/number';
 
-//services
+//Services
 import dialerService from './service/dialer';
 import lookupService from './service/lookup';
 import mailService from './service/mail';
@@ -31,20 +31,20 @@ import textService from './service/text';
 import tinyUrlService from './service/tinyurl';
 import userService from './service/user';
 
-//db
+//Db
 import configureMongoose, {connect as connectMongoose, disconnect as disconnectMongoose} from './app/mongoose';
 
-//workers
+//Workers
 import Worker from './worker/pool';
 
-//workflow
+//Workflow
 import Workflow from './workflow/workflow';
 import WorkflowStep from './workflow/workflow.step';
 
-//validation
+//Validation
 import validate, {Joi as joi} from './validation/joi.validation';
 
-// libs
+// Libs
 import lodash from 'lodash';
 import moment from 'moment';
 import mongoose from 'mongoose';
@@ -53,72 +53,72 @@ import express from 'express';
 import dotenv from 'dotenv';
 
 const configureServices = (config, app) => [
-  dialerService,
-  lookupService,
-  mailService,
-  ogiService,
-  textService,
-  tinyUrlService,
-  userService,
+    dialerService,
+    lookupService,
+    mailService,
+    ogiService,
+    textService,
+    tinyUrlService,
+    userService,
 ].forEach(m => m.configure(config, app));
 
 export {
-  //app
-  configureApp,
+    //App
+    configureApp,
 
-  //db
-  configureMongoose,
-  connectMongoose,
-  disconnectMongoose,
+    //Db
+    configureMongoose,
+    connectMongoose,
+    disconnectMongoose,
 
-  //auth
-  configureAuth,
-  authApi,
-  authEmailPassword,
-  authJWT,
-  authUserRole,
+    //Auth
+    configureAuth,
+    authApi,
+    authEmailPassword,
+    authJWT,
+    authUserRole,
 
-  //config
-  config,
-  configSchema,
+    //Config
+    config,
+    configSchema,
 
-  //errors
-  BaseError,
-  HttpError,
-  ApiHttpError,
-  UnauthorizedHttpError,
-  BadRequestHttpError,
-  NotFoundHttpError,
-  HttpErrorFactory,
-  SkipWorkerError,
+    //Errors
+    BaseError,
+    HttpError,
+    ApiHttpError,
+    UnauthorizedHttpError,
+    BadRequestHttpError,
+    NotFoundHttpError,
+    HttpErrorFactory,
+    SkipWorkerError,
 
-  //logger
-  configureLogger,
-  logger,
+    //Logger
+    configureLogger,
+    logger,
 
-  //helpers
-  numberHelper,
+    //Helpers
+    numberHelper,
 
-  //services
-  configureServices,
-  dialerService,
-  lookupService,
-  mailService,
-  ogiService,
-  textService,
-  tinyUrlService,
-  userService,
+    //Services
+    configureServices,
+    dialerService,
+    lookupService,
+    mailService,
+    ogiService,
+    textService,
+    tinyUrlService,
+    userService,
 
-  //workers
-  Worker,
+    //Workers
+    Worker,
 
-  //workflow
-  Workflow,
-  WorkflowStep,
+    //Workflow
+    Workflow,
+    WorkflowStep,
 
-  //validations
-  validate,
+    //Validations
+    validate,
 
-  // libs
-  lodash, moment, mongoose, request, express, dotenv, joi,
+    // Libs
+    lodash, moment, mongoose, request, express, dotenv, joi,
 };

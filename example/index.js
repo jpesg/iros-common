@@ -1,43 +1,43 @@
 import {express} from 'iros-common';
 
-// config should be imported before importing any other file
+// Config should be imported before importing any other file
 import config from './config';
 
-//import config helpers
+//Import config helpers
 import {configureLogger, configureAuth, configureApp, configureServices, configureMongoose, authApi, mailService, logger, validate} from 'iros-common';
 import validationSchema from './validation';
 
-// init logs
+// Init logs
 configureLogger();
 
-// init auth
+// Init auth
 configureAuth(config);
 
-// init database
+// Init database
 configureMongoose(config);
 
-// init services
+// Init services
 configureServices(config.service, config.app);
 
-// configure routes
+// Configure routes
 const router = express.Router();
 
-// validation
+// Validation
 router.post(
     '/validation',
     validate({body: validationSchema}),
-    (req, res) => res.json({valid: true}),
+    (req, res) => res.json(req.body),
 );
 
 router.get(
     '/auth-only',
-    // api authentication
+    // Api authentication
     authApi,
     (req, res) => res.json({}),
 );
 router.post(
     '/send-mail',
-    // service usage
+    // Service usage
     () => mailService.send({
         sender: 'test@domain.com',
         from: 'Test ACC <test@domain.com>',
@@ -48,21 +48,21 @@ router.post(
     }),
 );
 
-// init app
+// Init app
 const app = configureApp(router);
 
 /*
- * module.parent check is required to support mocha watch
+ * Module.parent check is required to support mocha watch
  * src: https://github.com/mochajs/mocha/issues/1912
  */
 if (!module.parent) {
-    // listen on port config.port
+    // Listen on port config.port
     app.listen(config.port, () => {
         logger.info(`server started on port ${config.port} (${config.env})`);
     });
 }
 
-//configure workers
+//Configure workers
 /*
  *import {Worker} from 'iros-common';
  *const worker = new Worker({
