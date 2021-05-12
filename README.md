@@ -1,3 +1,9 @@
+## Update to 2.0.33
+
+### User service
+
+User service now requires app sections to be defined in .env. It takes a comma delimited string - `USER_SECTIONS=all,quotes`
+
 ## Update to 2.xxx
 
 ### Joi changes
