@@ -16,8 +16,7 @@ export default class WorkflowStep {
             retrieveAll
         ].forEach(fn => {
             if (typeof fn !== 'function') {
-                logger.error({
-                    'step': 'failed to create workflow step',
+                logger.error('failed to create workflow step', {
                     e: `${fn} is not a function but ${typeof fn}`,
                     name
                 });

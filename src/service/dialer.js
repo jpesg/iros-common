@@ -36,8 +36,8 @@ function send(path, data = {}) {
 
     return request(options)
         .then(body => body)
-        .catch(err => {
-            logger.error(err);
+        .catch(e => {
+            logger.error('Failed to request dialler service', {e});
 
             return Promise.reject(new Error('Failed to request Dialer Service'));
         });

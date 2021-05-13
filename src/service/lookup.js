@@ -41,13 +41,13 @@ function send(path, data = {}) {
         uri: `${service.url}/${path}`,
         body: data,
         json: true,
-        headers: {'Authorization': `Bearer ${service.key}`, },
+        headers: {'Authorization': `Bearer ${service.key}`},
     };
 
     return request(options)
         .then(body => body)
-        .catch(err => {
-            logger.error(err);
+        .catch(e => {
+            logger.error('Failed to request Lookup Service', {e});
 
             return Promise.reject(new Error('Failed to request Lookup Service'));
         });

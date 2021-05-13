@@ -43,10 +43,31 @@ function getCaller() {
 
 
 const logger = {
-    info: (...args) => _logger.info(...args, getCaller()),
-    log: (...args) => _logger.log(...args, getCaller()),
-    warn: (...args) => _logger.warn(...args, getCaller()),
-    error: (...args) => _logger.error(...args, getCaller()),
+    debug: (message, ...data) => _logger.info({
+        message,
+        ...getCaller(),
+        data: JSON.stringify(data)
+    }),
+    info: (message, ...data) => _logger.info({
+        message,
+        ...getCaller(),
+        data: JSON.stringify(data)
+    }),
+    log: (message, ...data) => _logger.log({
+        message,
+        ...getCaller(),
+        data: JSON.stringify(data)
+    }),
+    warn: (message, ...data) => _logger.warn({
+        message,
+        ...getCaller(),
+        data: JSON.stringify(data)
+    }),
+    error: (message, ...data) => _logger.error({
+        message,
+        ...getCaller(),
+        data: JSON.stringify(data)
+    }),
 };
 
 export default logger;

@@ -64,10 +64,7 @@ const configure = (config, app_name) => {
         app,
         sections: service.sections
     }).catch(e => {
-        logger.error({
-            'msg': 'failed to setup app and sections on user service',
-            e
-        });
+        logger.error('failed to setup app and sections on user service', {e});
     });
 };
 

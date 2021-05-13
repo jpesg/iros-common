@@ -12,7 +12,13 @@ const isValid = (number, country = 'GB') => {
 
         return phoneUtil.isValidNumber(parsed);
     } catch (e) {
-        logger.warn(`failed to validate number ${number}. ${e.message}`);
+        logger.warn(
+            'failed to validate number',
+            {
+                number,
+                e
+            }
+        );
 
         return false;
     }
@@ -25,7 +31,13 @@ const getCountry = (number) => {
         return phoneUtil.getRegionCodeForNumber(parsed);
 
     } catch (e) {
-        logger.warn(`failed to parse number ${number}. ${e.message}`);
+        logger.warn(
+            'failed to parse number',
+            {
+                number,
+                e
+            }
+        );
 
     }
 };
@@ -42,7 +54,13 @@ const format = (number, form = PhoneNumberFormat.INTERNATIONAL, country = 'GB') 
 
         return form === PhoneNumberFormat.INTERNATIONAL ? formatted.replace(/ /g, '') : formatted;
     } catch (e) {
-        logger.warn(`failed to format number ${number}. ${e.message}`);
+        logger.warn(
+            'failed to format number',
+            {
+                number,
+                e
+            }
+        );
 
         return null;
     }

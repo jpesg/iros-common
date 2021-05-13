@@ -21,8 +21,8 @@ function minify(url) {
 
     return request(options)
         .then(body => body)
-        .catch(err => {
-            logger.error(err);
+        .catch(e => {
+            logger.error('Failed to request TinyUrl Service', {e});
 
             return Promise.reject(new Error('Failed to request TinyUrl Service'));
         });

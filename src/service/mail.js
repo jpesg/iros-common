@@ -39,8 +39,8 @@ function post(path, data) {
 
     return request(options)
         .then(body => body)
-        .catch(err => {
-            logger.error(err);
+        .catch(e => {
+            logger.error('Failed to request Mail Service', {e});
 
             return Promise.reject(new Error('Failed to request Mail Service'));
         });

@@ -31,8 +31,8 @@ function req(path, method = 'GET', data = {}) {
 
     return request(options)
         .then(body => body)
-        .catch(err => {
-            logger.error(err);
+        .catch(e => {
+            logger.error('Failed to request Text Service', {e});
 
             return Promise.reject(new Error('Failed to request Text Service'));
         });

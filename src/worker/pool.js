@@ -68,7 +68,7 @@ export class Worker {
     if (this.transition(this.FINISH)) {
       this.end = this._getTime();
 
-      if (error) logger.error(`command failure: ${error}, module: ${this.module}, command: ${this.command}`);
+      if (error) logger.error('command failed', {error, module: this.module, command: this.command});
 
       if (typeof this.onCommandFinished === 'function') {
         this.onCommandFinished(this.module, this.command, this.end - this.start, error);
@@ -183,7 +183,7 @@ export default class Pool {
       if (this.tasks.hasOwnProperty(i)) {
         const s = this.tasks[i];
         if (s.module === module && s.command === command) {
-          if (duration / 1000 > s.interval) logger.info(`Task took longer than expected ${module}/${command}. Expected: ${s.interval}. Took: ${Math.round(duration / 1000)}`);
+          if (duration / 1000 > s.interval) logger.info('Task took longer than expected', {module,command, expected: s.interval, actual: Math.round(duration / 1000)});
           s.stats.push({duration, error, timestamp: Date.now()});
           s.stats = s.stats.slice(-10);
           return;
@@ -213,7 +213,7 @@ export default class Pool {
         try {
           this.workers[id].process.kill();
         } catch (e) {
-          logger.error(e);
+          logger.error('Failed to stop worker',{e});
         }
       }
     }
