@@ -41,32 +41,47 @@ function getCaller() {
     }
 }
 
+const safeStringify = (obj, indent = 2) => {
+    try {
+        let cache = [];
+        const retVal = JSON.stringify(
+            obj,
+            (key, value) => (typeof value === 'object' && value !== null ? cache.includes(value) ? undefined : cache.push(value) && value : value),
+            indent
+        );
+        cache = null;
+
+        return retVal;
+    } catch (e) {
+        // Suppress eny errors here
+    }
+};
 
 const logger = {
     debug: (message, ...data) => _logger.info({
         message,
         ...getCaller(),
-        data: JSON.stringify(data)
+        data: safeStringify(data)
     }),
     info: (message, ...data) => _logger.info({
         message,
         ...getCaller(),
-        data: JSON.stringify(data)
+        data: safeStringify(data)
     }),
     log: (message, ...data) => _logger.log({
         message,
         ...getCaller(),
-        data: JSON.stringify(data)
+        data: safeStringify(data)
     }),
     warn: (message, ...data) => _logger.warn({
         message,
         ...getCaller(),
-        data: JSON.stringify(data)
+        data: safeStringify(data)
     }),
     error: (message, ...data) => _logger.error({
         message,
         ...getCaller(),
-        data: JSON.stringify(data)
+        data: safeStringify(data)
     }),
 };
 
