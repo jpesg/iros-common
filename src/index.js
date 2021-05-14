@@ -62,7 +62,7 @@ const serviceMap = {
     'user': userService
 };
 
-const configureServices = (services, app) => _.keys(services).forEach(name => (serviceMap.hasOwnProperty(name) ? serviceMap[name].configure(services, app) : null));
+const configureServices = (services, app) => lodash.keys(services).forEach(name => (serviceMap.hasOwnProperty(name) ? serviceMap[name].configure(services, app) : null));
 
 export {
     //App
