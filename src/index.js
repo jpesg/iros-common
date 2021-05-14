@@ -52,15 +52,17 @@ import request from 'request-promise';
 import express from 'express';
 import dotenv from 'dotenv';
 
-const configureServices = (config, app) => [
-    dialerService,
-    lookupService,
-    mailService,
-    ogiService,
-    textService,
-    tinyUrlService,
-    userService,
-].forEach(m => m.configure(config, app));
+const serviceMap = {
+    'dialler': dialerService,
+    'lookup': lookupService,
+    'mail': mailService,
+    'ogi': ogiService,
+    'text': textService,
+    'tinyUrl': tinyUrlService,
+    'user': userService
+};
+
+const configureServices = (services, app) => _.keys(services).forEach(name => (serviceMap.hasOwnProperty(name) ? serviceMap[name].configure(services, app) : null));
 
 export {
     //App
