@@ -6,7 +6,7 @@
     "start": "gulp serve"
   },
   "dependencies": {
-    "iros-common": "^2.0.23"
+    "iros-common": "^2.0.43"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",

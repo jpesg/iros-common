@@ -17,7 +17,7 @@ const services = [
     'mail',
     'ogi',
     'text',
-    'tinyurl'
+    'tinyUrl'
 ];
 for (const s in services) {
     if (services.hasOwnProperty(s)) {
