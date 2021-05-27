@@ -5,13 +5,11 @@ const getServiceUrl = (service) => `${service.toUpperCase()}_URL`,
 
 const schema = {
     api: {API_KEY: Joi.string().required()},
-    user: {
-        USER_URL: Joi.string().required(),
-        USER_SECTIONS: Joi.string().required()
-    },
+    user: {USER_SECTIONS: Joi.string().required()},
 };
 
 const services = [
+    'user',
     'dialer',
     'lookup',
     'mail',
@@ -23,7 +21,7 @@ for (const s in services) {
     if (services.hasOwnProperty(s)) {
         const service = services[s];
         // Add to schema
-        schema[service] = {};
+        schema[service] = {...(schema[service] || {})};
         schema[service][getServiceUrl(service)] = Joi.string().required();
         schema[service][getServiceKey(service)] = Joi.string().required();
     }

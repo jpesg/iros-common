@@ -1,3 +1,9 @@
+## Update to 2.0.44
+
+### User service
+
+User service now requires api key in .env
+
 ## Update to 2.0.33
 
 ### User service
