@@ -15,7 +15,8 @@ const configure = (config, mongoose = null, connect_automatically = true) => {
         if (error) {
             logger.error('failed to connect to mongodb', {
                 mongoUri,
-                mongoOptions
+                mongoOptions,
+                error
             });
         }
     });
