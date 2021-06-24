@@ -15,7 +15,7 @@ const services = [
     'mail',
     'ogi',
     'text',
-    'tinyUrl'
+    'tinyUrl',
 ];
 for (const s in services) {
     if (services.hasOwnProperty(s)) {
@@ -41,6 +41,14 @@ const config = (service, envVars = {}) => {
 
     if (service === 'user' && schema[service] && schema[service].USER_SECTIONS) {
         out.sections = envVars.USER_SECTIONS.split(',');
+        out.SECTIONS = envVars.USER_SECTIONS.split(',').reduce((obj, section) => ({
+            ...obj,
+            [section.toUpperCase()]: section
+        }), {});
+        out.ROLES = {
+            ADMIN: 'admin',
+            USER: 'user',
+        };
     }
 
     return out;
