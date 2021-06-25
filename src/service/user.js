@@ -6,9 +6,15 @@ import logger from '../logger/logger';
 let service = {};
 let app = 'unknown';
 
-
 function send(options) {
-    if (options.headers && options.headers.authorization && !options.headers.authorization.match('^JWT ')) {
+
+    // Prepend JWT if we receive plain auth token
+    if (
+        options.headers &&
+      options.headers.authorization &&
+      !options.headers.authorization.match(/^bearer /i) &&
+      !options.headers.authorization.match(/^jwt /i)
+    ) {
         options.headers.authorization = `JWT ${options.headers.authorization}`;
     }
 
@@ -24,7 +30,7 @@ function send(options) {
                 message,
                 isPublic,
                 errors,
-                status
+                status,
             }));
         });
 }
@@ -55,7 +61,6 @@ function get(path, data = {}, authorization = null, override_options = {}) {
     });
 }
 
-
 const configure = (config, app_name) => {
     service = config.user;
     app = app_name;
@@ -63,7 +68,7 @@ const configure = (config, app_name) => {
     post('/app/settings', {
         app,
         sections: service.sections
-    }).catch(e => {
+    }, {authorization: `bearer ${service.key}`}).catch(e => {
         logger.error('failed to setup app and sections on user service', {e});
     });
 };
@@ -71,7 +76,7 @@ const configure = (config, app_name) => {
 function login(email, password) {
     return post('/auth/password', {
         email,
-        password
+        password,
     });
 }
 
@@ -79,9 +84,10 @@ function canAccess(jwt, role = 'user', section = null) {
     return get('/user/can-access', {
         app,
         section,
-        role
+        role,
     }, jwt);
 }
+
 function do_delete(path, data = {}, authorization = null, override_options = {}) {
     return send({
         ...{
@@ -104,7 +110,7 @@ function resetPassword(email, token, password) {
     return post('/auth/password/reset', {
         email,
         token,
-        password
+        password,
     });
 }
 
@@ -115,16 +121,15 @@ function getUsers(jwt, company = undefined) {
 function createUser(email, jwt, company = undefined) {
     return post('/user', {
         email,
-        company
+        company,
     }, jwt);
 }
-
 
 function deleteRole(email, role, section, jwt) {
     const data = {
         email,
         app,
-        role
+        role,
     };
     if (section) {
         data.section = section;
@@ -132,7 +137,6 @@ function deleteRole(email, role, section, jwt) {
 
     return do_delete('/user/role', data, jwt);
 }
-
 
 function deleteUser(email, jwt) {
     return get('/user', {email}, jwt)
@@ -147,7 +151,7 @@ function deleteUser(email, jwt) {
 function foreDeleteUser(email, jwt) {
     const data = {
         email,
-        app
+        app,
     };
 
     return do_delete('/user', data, jwt);
@@ -158,7 +162,7 @@ function addRole(email, role, section, jwt) {
         email,
         app,
         role,
-        section
+        section,
     };
 
     return post('/user/role', data, jwt);
@@ -175,5 +179,5 @@ export default {
     deleteRole,
     deleteUser,
     foreDeleteUser,
-    configure
+    configure,
 };
