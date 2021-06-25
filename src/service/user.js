@@ -68,7 +68,7 @@ const configure = (config, app_name) => {
     post('/app/settings', {
         app,
         sections: service.sections
-    }, {authorization: `bearer ${service.key}`}).catch(e => {
+    }, `bearer ${service.key}`).catch(e => {
         logger.error('failed to setup app and sections on user service', {e});
     });
 };
