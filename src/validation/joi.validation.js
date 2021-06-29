@@ -75,7 +75,7 @@ const options = {
         'object.legal_age': 'Date is before 18th birthday',
     };
 
-const validate = async (data, schema, location, allowUnknown) => {
+const validate = (data, schema, location, allowUnknown) => {
     if (!data || !schema) {
         return {};
     }
@@ -90,7 +90,7 @@ const validate = async (data, schema, location, allowUnknown) => {
         joiSchema = Joi.object(schema).unknown()
             .required();
 
-    const {error, value} = await joiSchema.validateAsync(data, joiOptions),
+    const {error, value} = joiSchema.validate(data, joiOptions),
         out_errors = {};
 
     if (!error || !error.details || !error.details.length) {
@@ -120,7 +120,7 @@ export default (schema) => {
         throw new Error('Please provide validation schema');
     }
 
-    return async (req, res, next) => {
+    return (req, res, next) => {
         const keys = [
                 'headers',
                 'body',
@@ -132,13 +132,12 @@ export default (schema) => {
 
         let errors = {};
 
-        await Promise.all(keys.map(async key => {
-
+        keys.forEach(key => {
             const options = _.defaults({}, schema.options || {}),
                 allowUnknown = options[unknownMap[key]];
 
             if (schema[key]) {
-                const {value, errors: _errors} = await validate(r[key], schema[key], key, allowUnknown);
+                const {value, errors: _errors} = validate(r[key], schema[key], key, allowUnknown);
                 if (!_errors && value) {
                     req[key] = {
                         ...req[key],
@@ -152,7 +151,7 @@ export default (schema) => {
                     };
                 }
             }
-        }));
+        });
 
         if (!_.isEmpty(errors)) {
             return next(new ValidationHttpError(errors));
