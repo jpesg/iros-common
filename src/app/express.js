@@ -23,7 +23,15 @@ const configureApp = (routes, staticPath = null) => {
 
     // Mount static files
     if (staticPath !== null) {
-        app.use('/static', express.static(staticPath));
+        if (Array.isArray(staticPath)) {
+            staticPath.forEach(({path, folder}) => {
+                app.use(path, express.static(folder));
+            });
+        }
+
+        if (typeof staticPath === 'string') {
+            app.use('/static', express.static(staticPath));
+        }
     }
 
     // If error is not an instanceOf HttpError, convert it.
