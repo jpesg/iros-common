@@ -71,7 +71,7 @@ if (!module.parent) {
  *    runEverySecond: {
  *      module: `${__dirname}/task`,
  *      command: 'run',
- *      interval: 1000,
+ *      delay: 1000,
  *    },
  *  },
  *});

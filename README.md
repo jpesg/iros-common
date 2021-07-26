@@ -1,3 +1,10 @@
+## Update to 3.0.0
+
+Everything is now migrated to Typescript.
+
+Breaking changes:
+ - workers now use delays instead of timeouts
+
 ## Update to 2.0.44
 
 ### User service
