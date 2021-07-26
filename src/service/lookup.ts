@@ -5,7 +5,7 @@ import logger from '../logger/logger';
 let service: Record<string, unknown> = {};
 
 const configure: ServiceConfigFunc = (config) => {
-    service = config.lookup;
+    service = config;
 };
 
 function getVehicleByVrm(data: unknown) {

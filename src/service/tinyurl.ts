@@ -5,7 +5,7 @@ import logger from '../logger/logger';
 let service: Record<string, unknown> = {};
 
 const configure: ServiceConfigFunc = (config) => {
-    service = config.tinyUrl;
+    service = config;
 };
 
 function getLink(response_object: { path: string }) {

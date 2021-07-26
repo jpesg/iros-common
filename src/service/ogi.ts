@@ -5,7 +5,7 @@ import logger from '../logger/logger';
 let service: Record<string, unknown> = {};
 
 const configure: ServiceConfigFunc = (config) => {
-    service = config.ogi;
+    service = config;
 };
 
 async function send(query: string, params: Record<string, string>) {

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {EventEmitter} from 'events';
 import logger from '../logger/logger';
 import WorkflowStep, { WorkflowStepContext } from './workflow.step'

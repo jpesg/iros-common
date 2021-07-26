@@ -153,8 +153,6 @@ export default (
         let errors = {};
 
         keys.forEach(key => {
-            // FIXME: const options = _.defaults({}, schema.options || {}), // i think this is redundant?
-
             const allowUnknown = options[unknownMap[key]];
 
             if (schema[key] !== undefined) {

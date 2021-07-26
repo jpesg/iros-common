@@ -5,14 +5,15 @@ import cors from 'cors';
 import httpStatus from 'http-status';
 import helmet from 'helmet';
 import {NotFoundHttpError} from '../errors/http.error';
-import HttpError, { IHttpError } from '../errors/http.error';
+import HttpError, {IHttpError} from '../errors/http.error';
 
 type StaticPathConfig = {
     path: string
     folder: string
 }
 
-const configureApp = (routes: express.Router, staticPath: null | StaticPathConfig[] = null) => {
+const configureApp = (routes: express.Router, staticPath: null | StaticPathConfig[] | string = null  ) =>
+{
     const app = express(),
         dev = process.env.NODE_ENV === 'development';
 
@@ -70,6 +71,7 @@ const configureApp = (routes: express.Router, staticPath: null | StaticPathConfi
     }
 
     return app;
-};
+}
+;
 
 export default configureApp;

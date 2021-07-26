@@ -17,7 +17,7 @@ type MongoConfig = {
 let mongoUri: string,
     mongoOptions: ConnectOptions = {};
 
-const notConfigured = () => new Error('Not Configured');
+const notConfigured = () => {}
 
 let connect = notConfigured,
     disconnect = notConfigured;
@@ -25,7 +25,7 @@ let connect = notConfigured,
 const configure = (config: { mongo: MongoConfig }, mongoose: typeof import('mongoose'), connect_automatically = true): void => {
     mongoose = mongoose || require('mongoose');
 
-    const connect = () => mongoose.connect(mongoUri, mongoOptions, error => {
+    connect = () => mongoose.connect(mongoUri, mongoOptions, error => {
         if (error) {
             logger.error('failed to connect to mongodb', {
                 mongoUri,
@@ -35,7 +35,7 @@ const configure = (config: { mongo: MongoConfig }, mongoose: typeof import('mong
         }
     });
 
-    const disconnect = () => mongoose.disconnect();
+    disconnect = () => mongoose.disconnect();
 
     // Make bluebird default Promise
     Promise = require('bluebird');

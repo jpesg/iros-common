@@ -1,4 +1,4 @@
-import {format, createLogger, transports, LoggerOptions, Logger} from 'winston';
+import {format, createLogger, transports, Logger} from 'winston';
 const {EOL} = require('os');
 
 let _logger: Console | Logger = console;
@@ -9,7 +9,6 @@ export const configureLogger = (config?: any) => {
             format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
             format.json({space: 0}),
         ),
-        // depth: true, TODO: not inside LoggerOptions
         level: 'info',
         defaultMeta: {app: config?.app},
         transports: [new transports.Console({})],

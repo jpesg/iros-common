@@ -1,11 +1,11 @@
-import type {Service, ServiceConfigFunc} from '../service/utils/types'
+import type {Service, ServiceConfigFunc} from './utils/types'
 import request from 'request-promise';
 import logger from '../logger/logger';
 
 let service: Record<string, unknown> = {};
 
 const configure: ServiceConfigFunc = (config) => {
-    service = config.dialer;
+    service = config
 };
 
 type CallType = {

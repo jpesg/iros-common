@@ -5,7 +5,7 @@ import logger from '../logger/logger';
 let service: Record<string, unknown> = {};
 
 const configure: ServiceConfigFunc = (config) => {
-    service = config.text;
+    service = config;
 };
 
 function send(from: string, to: string, content: string, processAt: string) {

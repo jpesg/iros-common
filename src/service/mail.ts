@@ -5,7 +5,7 @@ import logger from '../logger/logger';
 let service: Record<string, unknown> = {};
 
 const configure: ServiceConfigFunc = (config) => {
-    service = config.mail;
+    service = config;
 };
 
 type MandatorySendProps = {
