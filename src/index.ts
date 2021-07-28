@@ -65,10 +65,12 @@ const serviceMap: Record<ServiceName, Service> = {
     'user': userService
 };
 
+type RecordOfUnknowns = Record<string, unknown>
+
 const configureServices = (
     services: Partial<Record<ServiceName, Record<string, unknown>>>,
     app: string
-) => lodash.keys(services).forEach((name) => serviceMap[name as ServiceName].configure(services, app));
+) => Object.keys(services).forEach((name) => serviceMap[name as ServiceName].configure(services[name as ServiceName] as RecordOfUnknowns, app));
 
 export {
     //App
