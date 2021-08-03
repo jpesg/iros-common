@@ -70,7 +70,10 @@ type RecordOfUnknowns = Record<string, unknown>
 const configureServices = (
     services: Partial<Record<ServiceName, Record<string, unknown>>>,
     app: string
-) => Object.keys(services).forEach((name) => serviceMap[name as ServiceName].configure(services[name as ServiceName] as RecordOfUnknowns, app));
+) => Object.keys(services).forEach((name) => {
+    if (!serviceMap.hasOwnProperty(name)) return;
+    return serviceMap[name as ServiceName].configure(services[name as ServiceName] as RecordOfUnknowns, app)
+});
 
 export {
     //App
