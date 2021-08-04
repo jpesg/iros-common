@@ -44,7 +44,13 @@ const safeStringify = (obj: Record<string, unknown>, indent: number = 2) => {
 
         const retVal = JSON.stringify(
             obj,
-            (_, value) => (typeof value === 'object' && value !== null ? cache?.includes(value) ? undefined : cache?.push(value) && value : value),
+            (_, value) => {
+                if (value instanceof Error && !cache?.includes(value)) {
+                    cache?.push(value);
+                    return Object.getOwnPropertyNames(value).reduce((_out, key) => key !== 'stack' ? ({..._out, [key]: (value as any)[key]}): _out, {});
+                }
+                return typeof value === 'object' && value !== null ? cache?.includes(value) ? undefined : cache?.push(value) && value : value
+            },
             indent
         );
 
