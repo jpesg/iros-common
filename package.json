@@ -1,8 +1,9 @@
 {
   "name": "iros-common",
-  "version": "3.0.1",
+  "version": "3.0.6",
   "description": "",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "start": "gulp serve",
     "test": "cross-env NODE_ENV=test ./node_modules/.bin/mocha -r ts-node/register --ui bdd --reporter spec --colors src/tests/**/*.ts --recursive",
