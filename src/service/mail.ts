@@ -55,8 +55,15 @@ function post(path: string, data: unknown) {
 
 }
 
+export type MailService
+    = {
+        send: typeof send
+        sendError: typeof sendError
+    }
+    & Service
+
 export default {
     send,
     sendError,
     configure
-} as Service;
+} as MailService;

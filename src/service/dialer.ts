@@ -57,8 +57,15 @@ function send(path: string, data = {}) {
         });
 }
 
+export type DialerService
+    = {
+        cancelCall: typeof cancelCall
+        scheduleCall: typeof scheduleCall
+    }
+    & Service
+
 export default {
     configure,
     cancelCall,
     scheduleCall
-} as Service;
+} as DialerService;

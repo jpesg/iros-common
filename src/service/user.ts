@@ -6,17 +6,9 @@ import request from 'request-promise';
 import {HttpErrorFactory} from '../errors/http.error';
 import _ from 'lodash';
 import logger from '../logger/logger';
-import Bluebird from 'bluebird';
 
 let service: Record<string, unknown> = {};
 let app = '';
-
-export type UserService 
-    = Service
-    & {
-        login: (email: string, password: string) => Bluebird<any>
-        canAccess: (jwt: string, role: Role, section?: string) => Bluebird<any>
-    }
 
 function send(options: Partial<RequestPromiseOptions> & RequiredUriUrl) {
     // Prepend JWT if we receive plain auth token
@@ -103,6 +95,14 @@ function canAccess(jwt: string, role: Role = 'user', section?: string) {
 function getUsers(jwt: string, company?: string) {
     return get('/user/all', {company}, jwt);
 }
+
+export type UserService 
+    = {
+        login: typeof login
+        canAccess: typeof canAccess
+        getUsers: typeof getUsers
+    }
+    & Service
 
 export default {
     login,

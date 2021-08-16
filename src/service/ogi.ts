@@ -29,7 +29,13 @@ async function send(query: string, params: Record<string, string>) {
         });
 }
 
+export type OgiService 
+    = {
+        send: typeof send
+    }
+    & Service
+
 export default {
     send,
     configure
-} as Service;
+} as OgiService;

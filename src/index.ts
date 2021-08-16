@@ -30,6 +30,7 @@ import ogiService from './service/ogi';
 import textService from './service/text';
 import tinyUrlService from './service/tinyurl';
 import userService from './service/user';
+import {servicesMapBuilder} from './service/utils/types';
 
 //Db
 import configureMongoose, {connect as connectMongoose, disconnect as disconnectMongoose} from './app/mongoose';
@@ -53,9 +54,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 
 // Types
-import type {Service, ServiceName} from './service/utils/types'
+import type {ServiceName} from './service/utils/types'
 
-const serviceMap: Record<ServiceName, Service> = {
+const serviceMap = servicesMapBuilder({
     'dialer': dialerService,
     'lookup': lookupService,
     'mail': mailService,
@@ -63,12 +64,17 @@ const serviceMap: Record<ServiceName, Service> = {
     'text': textService,
     'tinyUrl': tinyUrlService,
     'user': userService
-};
+});
+
+type RecordOfUnknowns = Record<string, unknown>
 
 const configureServices = (
     services: Partial<Record<ServiceName, Record<string, unknown>>>,
     app: string
-) => lodash.keys(services).forEach((name) => serviceMap[name as ServiceName].configure(services, app));
+) => Object.keys(services).forEach((name) => {
+    if (!serviceMap.hasOwnProperty(name)) return;
+    return serviceMap[name as ServiceName].configure(services[name as ServiceName] as RecordOfUnknowns, app)
+});
 
 export {
     //App

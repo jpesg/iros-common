@@ -29,8 +29,15 @@ function minify(url: string) {
         });
 }
 
+export type TinyUrlService
+    = {
+        getLink: typeof getLink
+        minify: typeof minify
+    }
+    & Service
+
 export default {
     getLink,
     minify,
     configure
-} as Service;
+} as TinyUrlService;
