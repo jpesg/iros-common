@@ -68,8 +68,6 @@ const serviceMap = servicesMapBuilder({
 
 type RecordOfUnknowns = Record<string, unknown>
 
-type RecordOfUnknowns = Record<string, unknown>
-
 const configureServices = (
     services: Partial<Record<ServiceName, Record<string, unknown>>>,
     app: string
