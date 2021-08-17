@@ -39,8 +39,15 @@ function req(path: string, method = 'GET', data: unknown = {}) {
         });
 }
 
+type TextService 
+    = {
+        send: typeof send
+        get: typeof get
+    } 
+    & Service
+
 export default {
     send,
     get,
     configure
-} as Service;
+} as TextService;

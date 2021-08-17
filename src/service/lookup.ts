@@ -54,6 +54,18 @@ async function send(path: string, data: unknown = {}) {
         });
 }
 
+export type LookupService
+    = {
+        getVehicleByVrm: typeof getVehicleByVrm
+        getVehicleMake: typeof getVehicleMake
+        getVehicleModel: typeof getVehicleModel
+        getVehicleYear: typeof getVehicleYear
+        getVehicleSpec: typeof getVehicleSpec
+        getAddressesByPostcode: typeof getAddressesByPostcode
+        getAddress: typeof getAddress
+    }
+    & Service
+
 export default {
     configure,
     getVehicleByVrm,
