@@ -1,7 +1,17 @@
-import {format, createLogger, transports, Logger} from 'winston';
+import {format, createLogger, transports, Logger as WinstonLogger} from 'winston';
 const {EOL} = require('os');
 
-let _logger: Console | Logger = console;
+let _logger: Console | WinstonLogger = console;
+
+type LoggerCall = (message: string, data?: Record<string, unknown>) => void
+
+type IrosLogger = {
+  debug: LoggerCall
+  info: LoggerCall
+  log: LoggerCall
+  warn: LoggerCall
+  error: LoggerCall
+}
 
 export const configureLogger = (config?: any) => {
     _logger = createLogger({
@@ -62,9 +72,7 @@ const safeStringify = (obj: Record<string, unknown>, indent: number = 2) => {
     }
 };
 
-type LoggerCall = (message: string, data?: Record<string, unknown>) => void
-
-const logger: Record<string, LoggerCall> = {
+const logger: IrosLogger = {
     debug: (message, data) => _logger.info({
         message,
         ...getCaller(),
