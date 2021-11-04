@@ -22,7 +22,7 @@ type ExtraSendProps = {
     attachment: string
 }
 
-type SendProps = MandatorySendProps & Partial<ExtraSendProps>
+export type SendProps = MandatorySendProps & Partial<ExtraSendProps>
 
 function send(props: SendProps) {
     return post('mail', props);
