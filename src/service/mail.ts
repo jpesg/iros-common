@@ -20,6 +20,7 @@ type MandatorySendProps = {
 type ExtraSendProps = {
     bcc: string
     attachment: string
+    processAt: string
 }
 
 export type SendProps = MandatorySendProps & Partial<ExtraSendProps>
