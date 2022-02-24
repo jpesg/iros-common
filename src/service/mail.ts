@@ -9,17 +9,17 @@ const configure: ServiceConfigFunc = (config) => {
 };
 
 type MandatorySendProps = {
-    sender: string,
-    from: string,
-    to: string,
-    text: string,
-    subject: string,
+    sender: string
+    from: string
+    to: string
+    text: string
+    subject: string
     html: string
 }
 
 type ExtraSendProps = {
     bcc: string
-    attachment: string
+    attachment: [{filename: string, content: string}]
     processAt: string
 }
 
